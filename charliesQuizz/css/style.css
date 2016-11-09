@@ -28,19 +28,19 @@ p {
 }
 
 .b1 {
-  background: url("../assets/background1.jpg") no-repeat center fixed;
+  background: url("../assets/img/background1.jpg") no-repeat center fixed;
   -webkit-background-size: cover;
   background-size: cover;
 }
 
 .b2 {
-  background: url("../assets/background2.jpg") no-repeat center fixed;
+  background: url("../assets/img/background2.jpg") no-repeat center fixed;
   -webkit-background-size: cover;
   background-size: cover;
 }
 
 .b3 {
-  background: url("../assets/background3.jpg") no-repeat center fixed;
+  background: url("../assets/img/background3.jpg") no-repeat center fixed;
   -webkit-background-size: cover;
   background-size: cover;
 }
