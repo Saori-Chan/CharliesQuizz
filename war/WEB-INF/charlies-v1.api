@@ -25,6 +25,42 @@
     "maxAge" : 0
   },
   "methods" : {
+    "charlies.charliesEndpoint.load" : {
+      "path" : "load",
+      "httpMethod" : "POST",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "charlies.api.CharliesEndpoint.load",
+      "request" : {
+        "body" : "empty"
+      },
+      "response" : {
+        "body" : "autoTemplate(backendResponse)"
+      }
+    },
+    "charlies.charliesEndpoint.listQuestions" : {
+      "path" : "/questions",
+      "httpMethod" : "GET",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "charlies.api.CharliesEndpoint.listQuestions",
+      "request" : {
+        "parameters" : {
+          "category" : {
+            "type" : "string",
+            "required" : true
+          }
+        },
+        "body" : "empty"
+      },
+      "response" : {
+        "body" : "autoTemplate(backendResponse)"
+      }
+    },
     "charlies.charliesEndpoint.listHighscores" : {
       "path" : "/highscores",
       "httpMethod" : "GET",
@@ -73,42 +109,6 @@
       },
       "response" : {
         "body" : "empty"
-      }
-    },
-    "charlies.charliesEndpoint.listQuestions" : {
-      "path" : "/questions",
-      "httpMethod" : "GET",
-      "authLevel" : "NONE",
-      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
-      "audiences" : [ ],
-      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
-      "rosyMethod" : "charlies.api.CharliesEndpoint.listQuestions",
-      "request" : {
-        "parameters" : {
-          "category" : {
-            "type" : "string",
-            "required" : true
-          }
-        },
-        "body" : "empty"
-      },
-      "response" : {
-        "body" : "autoTemplate(backendResponse)"
-      }
-    },
-    "charlies.charliesEndpoint.load" : {
-      "path" : "load",
-      "httpMethod" : "POST",
-      "authLevel" : "NONE",
-      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
-      "audiences" : [ ],
-      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
-      "rosyMethod" : "charlies.api.CharliesEndpoint.load",
-      "request" : {
-        "body" : "empty"
-      },
-      "response" : {
-        "body" : "autoTemplate(backendResponse)"
       }
     }
   },
@@ -191,22 +191,22 @@
       }
     },
     "methods" : {
-      "charlies.api.CharliesEndpoint.listHighscores" : {
+      "charlies.api.CharliesEndpoint.load" : {
         "response" : {
           "$ref" : "ScoreCollection"
         }
-      },
-      "charlies.api.CharliesEndpoint.insertScore" : {
       },
       "charlies.api.CharliesEndpoint.listQuestions" : {
         "response" : {
           "$ref" : "QuizzSectionCollection"
         }
       },
-      "charlies.api.CharliesEndpoint.load" : {
+      "charlies.api.CharliesEndpoint.listHighscores" : {
         "response" : {
           "$ref" : "ScoreCollection"
         }
+      },
+      "charlies.api.CharliesEndpoint.insertScore" : {
       }
     }
   }

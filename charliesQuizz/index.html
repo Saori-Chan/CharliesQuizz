@@ -15,8 +15,9 @@
 		<script src="/assets/js/materialize.js"></script>
 		<script src="/assets/js/angular.min.js"></script>
 		<script src="/assets/js/app.js"></script>
-		<script src="/assets/js/angular-google-gapi.min.js"></script>
-		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-route.js"></script>
+		<script src="/assets/js/angular-google-gapi.js"></script>
+		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular-route.js"></script>
+		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular-cookies.js"></script>
 		<!--<script src="https://apis.google.com/js/platform.js" async defer></script>-->
 	</head>
 	<body ng-controller="myController">
@@ -25,28 +26,25 @@
 			<nav class="white" role="navigation">
 				<div class="nav-wrapper container">
 					<a id="logo-container" href="#/" class="brand-logo">Charlie's Quizz</a>
-					<ul class="right hide-on-med-and-down">
+					<ul class="right">
 						<li><a href="#/highscores">Highscores</a></li>
 						<li>
-							<a data-onsuccess="onSignIn">
+							<a ng-click="login()" ng-show="google_user == null">
 								<img src="/assets/img/g-logo.png" class="left" style="height: 22px; width: auto; margin-top: 20px; margin-right: 5px;">
 								<span>Google</span>
 							</a>
-						</li>
-					</ul>
-
-					<ul id="nav-mobile" class="side-nav">
-						<li><a href="#/highscores">Highscores</a></li>
-						<li>
-							<a data-onsuccess="onSignIn">
-								<img src="/assets/img/g-logo.png" class="left" style="height: 22px; width: auto; margin-top: 20px; margin-right: 5px;">
-								<span>Google</span>
+							<a class="black-text dropdown-button" ng-show="google_user != null" data-activates="dropdown">
+								<img ng-src="{{google_user.picture}}" class="left" style="height: 30px; margin-top: 20px; margin-right: 5px;">
+								{{ google_user.name }}
+								<i class="material-icons right">arrow_drop_down</i>
 							</a>
 						</li>
 					</ul>
-					<a href="#" data-activates="nav-mobile" class="button-collapse"><i class="material-icons">menu</i></a>
 				</div>
 			</nav>
+			<ul id="dropdown" class="dropdown-content" style="margin-top: 64px;">
+				<li><a ng-click="logout()">Sign out</a></li>
+			</ul>
 		</header>
 
 		<main>
