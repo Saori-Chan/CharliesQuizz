@@ -50,7 +50,6 @@ app.controller('myController', ['$scope', '$location', '$cookies', 'GApi', 'GAut
 
 	GAuth.checkAuth().then(
 		function(user) {
-			console.log(user);
 			$scope.google_user = user;
 		},
 		function() {
@@ -105,8 +104,6 @@ app.controller('myController', ['$scope', '$location', '$cookies', 'GApi', 'GAut
 				]
 			};
 
-			console.log($scope.category);
-
 			// Ici je recupere les differentes categories
 			// GApi.execute('scoreEntityEndPoint', 'listCategory').then( function(resp) {
 			//       $scope.category = resp.items;
@@ -114,8 +111,6 @@ app.controller('myController', ['$scope', '$location', '$cookies', 'GApi', 'GAut
 			//       console.log("error :(");
 			//   });
 		}
-
-		console.log($scope.google_user)
 
 		if (!$scope.google_user) {
 			$scope.login(request);
@@ -131,7 +126,21 @@ app.controller('myController', ['$scope', '$location', '$cookies', 'GApi', 'GAut
 	$scope.nextQuestion = function() {
 		$location.path('/play');
 
-		console.log($scope.sparqlResult);
+        switch($scope.cursorQuestion) {
+			case "who":
+				$scope.cursorQuestion = "when";
+				break;
+			case "when":
+				$scope.cursorQuestion = "where";
+				break;
+			case "where":
+				$scope.cursorQuestion = "who";
+				$scope.cursorSection++;
+				if($scope.sparqlResult.length <= $scope.cursorSection){
+					$scope.finished = true;
+				}
+				break;
+		}
 
 		$scope.questions = $scope.sparqlResult[$scope.cursorSection][$scope.cursorQuestion];
 
@@ -147,30 +156,21 @@ app.controller('myController', ['$scope', '$location', '$cookies', 'GApi', 'GAut
 			}
 		};
 
-		switch($scope.cursorQuestion) {
-			case "who":
-				$scope.cursorQuestion = "when";
-				break;
-			case "when":
-				$scope.cursorQuestion = "where";
-				break;
-			case "where":
-				$scope.cursorQuestion = "who";
-				$scope.cursorSection++;
-				if($scope.sparqlResult.length <= $scope.cursorSection){
-					$scope.finished = true;
-				}
-				break;
-		}
+        if ($scope.cursorQuestion == "where") {
+            $scope.initMap();
+        }
 	};
 
 	// Valider la question (On a decider de mettre la premiere reponse bonne mais pas dans la vue)
 	$scope.valid = function(answer){
-		console.log(answer);
 		$scope.questions.answered = answer;
 		if ($scope.questions.good_answer == answer) {
 			$scope.myscore += 10;
 		};
+<<<<<<< HEAD
+=======
+		//$scope.nextQuestion();
+>>>>>>> 142eccd621959f28234906b4e19980a1d2212e72
 	};
 
 	$scope.highscore = function (highscoreCategory) {
@@ -186,18 +186,74 @@ app.controller('myController', ['$scope', '$location', '$cookies', 'GApi', 'GAut
 		});
 	};
 
+<<<<<<< HEAD
   $scope.endGame = function() {
     $location.path('/endgame');
   }
+=======
+    $scope.initMap = function() {
+        $scope.map_choice = null;
+        var mapCanvas = document.getElementById("map");
+        var myCenter= new google.maps.LatLng(31.6341600,-7.9999400);
+        var mapOptions = {center: myCenter, zoom: 2};
+        var map = new google.maps.Map(mapCanvas, mapOptions);
+        var infowindow = new google.maps.InfoWindow();
+
+        function placeMarker(map,infowindow, location, fn) {
+            var marker = new google.maps.Marker({
+                position: location,
+                map: map,
+                draggable: true
+            });
+            var latLng = new google.maps.LatLng(marker.position.lat(),marker.position.lng());
+
+            infowindow.open(map,marker);
+            geocoderLatLng(map,infowindow,latLng);
+
+            google.maps.event.addListener(marker,'dragend', function(event) {
+                latLng = new google.maps.LatLng(marker.position.lat(),marker.position.lng());
+                geocoderLatLng(map,infowindow,latLng);
+            });
+        };
+
+        function geocoderLatLng(map, infowindow,latLng) {
+            var geocoder = new google.maps.Geocoder;
+            geocoder.geocode({'location':latLng}, function(results, status) {
+                if(status === google.maps.GeocoderStatus.OK) {
+                    if (results[1]) {
+                        var i = 0;
+                        while(results[1].address_components[i].types[0] != "country") {
+                            i++;
+                        }
+                        var country = results[1].address_components[i].long_name;
+                        infowindow.setContent(country);
+                        $scope.map_choice = country;
+                        $scope.$apply();
+                    } else {
+                        console.error('No results found');
+                    }
+                } else {
+                    console.error('Geocoder failed due to: ' + status);
+                }
+            });
+        };
+
+        google.maps.event.addListenerOnce(map, 'click', function(event) {
+            placeMarker(map, infowindow, event.latLng);
+        });
+    };
+>>>>>>> 142eccd621959f28234906b4e19980a1d2212e72
 
 	// Variable pour recuperer les resultats sparql
 	$scope.sparqlResult = null;
 	// nbQuestion courant
-	$scope.cursorSection = 0;
+	$scope.cursorSection = -1;
 	//
-	$scope.cursorQuestion = "who";
+	$scope.cursorQuestion = "where";
 	// score (a voir si on fait ca comme ca !)
 	$scope.myscore = 0;
+
+    $scope.map_choice = "France";
 
 }]);
 
