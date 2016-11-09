@@ -56,18 +56,30 @@ app.controller('myController', ['$scope', '$location', '$cookies', 'GApi', 'GAut
 	);
 
 	$scope.play = function(){
-		GApi.execute('charlies', 'charliesEndpoint.listQuestions',{number: 10, category:"scientist"}).then( function(resp) {
-			$scope.sparqlResult = resp.items;
-			$scope.nextQuestion();
-		  }, function() {
-			console.log("error :(");
-		});
+		var request = function() {
+			GApi.execute('charlies', 'charliesEndpoint.listQuestions',{number: 10, category:"scientist"}).then( function(resp) {
+				$scope.sparqlResult = resp.items;
+				$scope.nextQuestion();
+			  }, function() {
+				console.log("error :(");
+			});
+		};
+
+		if (!$scope.google_user) {
+			$scope.login(request);
+		} else {
+			request();
+		}
+
 	};
 
-	$scope.login = function() {
+	$scope.login = function(callback) {
 		GAuth.login().then(function(user) {
 			$scope.google_user = user;
 			$cookies.put("google_auth_id", user.id);
+			if (callback) {
+				callback();
+			}
 		}, function() {
 			console.log('fail');
 		});
