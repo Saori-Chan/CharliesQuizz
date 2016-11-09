@@ -3,7 +3,7 @@
 	<div class="section no-pad-bot">
 		<div class="container">
 			<br><br>
-			<h1 class="header center teal-text text-lighten-2">Highscore {{myCategory}}</h1>
+			<h1 class="header center teal-text text-lighten-2">Highscore</h1>
 			<div class="card">
             	<div class="card-content">
 					<table class="highlight">
@@ -11,12 +11,14 @@
 							<tr>
 								<th data-field="id">Name</th>
 								<th data-field="price">Score</th>
+								<th data-field="price" ng-show="highscoreCategory">Category</th>
 							</tr>
 						</thead>
 						<tbody>
 							<tr ng-repeat="highscore in high">
 							  <td>{{highscore.name}}</td>
 							  <td>{{highscore.score}}</td>
+								<td ng-show="highscoreCategory">{{highscore.category}}</td>
 							</tr>
 						</tbody>
 					</table>

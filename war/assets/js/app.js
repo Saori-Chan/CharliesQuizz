@@ -35,12 +35,15 @@ app.config(function($routeProvider) {
 	.when("/category", {
 		templateUrl : "category.html"
 	})
-	.when("/highscore", {
+	.when("/highscores", {
 		templateUrl : "highscore.html"
 	})
 	.when("/play", {
 		templateUrl : "play.html"
-	});
+	})
+  .when("/endgame", {
+    templateUrl : "endgame.html"
+  });
 });
 
 app.controller('myController', ['$scope', '$location', '$cookies', 'GApi', 'GAuth', 'GData', function($scope, $location, $cookies, GApi, GAuth, GData){
@@ -62,7 +65,7 @@ app.controller('myController', ['$scope', '$location', '$cookies', 'GApi', 'GAut
 		// Variable pour savoir si le quizz est fini
 		$scope.finished = false;
 
-		GApi.execute('charlies', 'charliesEndpoint.listQuestions',{number: 5, category: $scope.myCategory}).then( function(resp) {
+		GApi.execute('charlies', 'charliesEndpoint.listQuestions',{number: 1, category: $scope.myCategory}).then( function(resp) {
 			$scope.sparqlResult = resp.items;
 			$scope.nextQuestion();
 		}, function() {
@@ -168,21 +171,24 @@ app.controller('myController', ['$scope', '$location', '$cookies', 'GApi', 'GAut
 		if ($scope.questions.good_answer == answer) {
 			$scope.myscore += 10;
 		};
-		console.log($scope.myscore);
-		//$scope.nextQuestion();
 	};
 
-	$scope.highscore = function () {
+	$scope.highscore = function (highscoreCategory) {
 		$location.path('/highscore');
+    console.log(highscoreCategory);
 
 		// Recuperation des highscores
-		GApi.execute('charlies', 'charliesEndpoint.listHighscores', {category: $scope.myCategory}).then( function(resp) {
+		GApi.execute('charlies', 'charliesEndpoint.listHighscores').then( function(resp) {
 			console.log(resp);
 			$scope.high = resp.items;
 		}, function() {
 			console.log("error :(");
 		});
 	};
+
+  $scope.endGame = function() {
+    $location.path('/endgame');
+  }
 
 	// Variable pour recuperer les resultats sparql
 	$scope.sparqlResult = null;

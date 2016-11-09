@@ -10,8 +10,8 @@
 					<h1 class="header center teal-text text-lighten-2">{{questions.question}}</h1>
 					<ul class="collection" ng-repeat="answer in questions.answers">
 						<li class="collection-item ng-class:{
-									'white': questions.answered === false, 
-									'green': questions.answered !== false && questions.good_answer === $index, 
+									'white': questions.answered === false,
+									'green': questions.answered !== false && questions.good_answer === $index,
 									'red': questions.answered !== false && questions.good_answer !== $index && questions.answered === $index
 								}">
 								<div class="waves-effect waves-teal btn-flat ng-class:{
@@ -20,7 +20,7 @@
 						</li>
 					</ul>
 					<a href="#/play" class="btn-large waves-effect waves-light teal lighten-1 right" ng-click="nextQuestion()" ng-show="questions.answered !== false && finished !== true">Next</a>
-					<a href="#/highscore" class="btn-large waves-effect waves-light teal lighten-1 right" ng-click="highscore()" ng-show="questions.answered !== false && finished === true">Show highscore</a>
+					<a href="#/endgame" class="btn-large waves-effect waves-light teal lighten-1 right" ng-click="endGame()" ng-show="questions.answered !== false && finished === true">Show highscore</a>
 				</div>
 			</div>
 		</div>

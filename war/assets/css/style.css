@@ -45,6 +45,12 @@ p {
   background-size: cover;
 }
 
+.b4 {
+  background: url("../img/background6.jpg") no-repeat center fixed;
+  -webkit-background-size: cover;
+  background-size: cover;
+}
+
 .icon-block {
   padding: 0 15px;
 }
@@ -64,4 +70,8 @@ main {
 
 footer.page-footer {
   margin: 0;
+}
+
+.score{
+  color: #ff8a65;
 }
