@@ -1,4 +1,31 @@
-var app = angular.module('appGame', ['angular-google-gapi', 'ngRoute']);
+var app = angular.module('appGame', ['angular-google-gapi', 'ngRoute', 'ngCookies']);
+
+// Charger gapi avec angular
+app.run(['GAuth', 'GApi', 'GData', '$rootScope', '$cookies',
+    function(GAuth, GApi, GData, $rootScope, $cookies) {
+
+		$rootScope.gdata = GData;
+
+		var CLIENT = '244115085310-dmd5grs3mat4dvirsggn800tr44l9vvd.apps.googleusercontent.com';
+		var BASE = 'https://1-dot-helloworld44230.appspot.com/_ah/api';
+
+		GApi.load('charlies','v1',BASE).then(function(resp) {
+			console.log('api: ' + resp.api + ', version: ' + resp.version + ' loaded');
+		},
+		function(resp) {
+			console.log('an error occured during loading api: ' + resp.api + ', resp.version: ' + version);
+		});
+
+		GAuth.setClient(CLIENT);
+		GAuth.setScope('https://www.googleapis.com/auth/userinfo.profile');
+
+		GAuth.load();
+
+		if ($cookies.get("google_auth_id")) {
+			GData.setUserId($cookies.get("google_auth_id"));
+		}
+	}
+]);
 
 app.config(function($routeProvider) {
 	$routeProvider
@@ -16,26 +43,22 @@ app.config(function($routeProvider) {
 	});
 });
 
-// Chargé gapi avec angular
-app.run(['GApi', 'GAuth',
-	function(GApi, GAuth) {
-		var BASE = 'https://1-dot-helloworld44230.appspot.com/_ah/api';  
-		GApi.load('charlies','v1',BASE).then(function(resp) {
-			console.log('api: ' + resp.api + ', version: ' + resp.version + ' loaded');
+app.controller('myController', ['$scope', '$location', '$cookies', 'GApi', 'GAuth', 'GData', function($scope, $location, $cookies, GApi, GAuth, GData){
+
+	GAuth.checkAuth().then(
+		function(user) {
+			console.log(user);
+			$scope.google_user = user;
 		},
-		function(resp) {
-			console.log('an error occured during loading api: ' + resp.api + ', resp.version: ' + version);
-		});
-	}
-]);
+		function() {
+			console.log('error');
+		}
+	);
 
-
-app.controller('myController', ['$scope', '$location', 'GApi', function($scope, $location, GApi){
 	$scope.play = function(){
 		// Ici recuperation des questions à partir du endpoint
 		// Probleme endpoint et methode
 		GApi.execute('scoreEntityEndPoint', 'listQuestions').then( function(resp) {
-			console.log("here");
 			console.log(resp);
 			$scope.sparqlResult = resp.items;
 		  }, function() {
@@ -44,12 +67,26 @@ app.controller('myController', ['$scope', '$location', 'GApi', function($scope, 
 	  	$scope.nextQuestion();
 	};
 
+	$scope.login = function() {
+		GAuth.login().then(function(user) {
+			$scope.google_user = user;
+			$cookies.put("google_auth_id", user.id);
+		}, function() {
+			console.log('fail');
+		});
+	};
+
+	$scope.logout = function() {
+		GAuth.logout();
+		$scope.google_user = null;
+		$cookies.remove("google_auth_id");
+	}
 
 	$scope.category = function(){
 	  $location.path('/category');
-	  
+
 	  // En attendant que le endpoint soit OK :
-	  $scope.category = { 
+	  $scope.category = {
 		categ: ["Scientist",
 		"Monument",
 		"Autres"]
@@ -63,8 +100,8 @@ app.controller('myController', ['$scope', '$location', 'GApi', function($scope, 
 	  //   });
 	};
 
-	// Question suivantes 
-	/* (selon le nb de question passé et 
+	// Question suivantes
+	/* (selon le nb de question passé et
 		a quelle section du resultat sparql on en est !)
 	*/
 	$scope.nextQuestion = function() {
@@ -131,12 +168,12 @@ app.controller('myController', ['$scope', '$location', 'GApi', function($scope, 
 	}
 ]);
 
-// Alors ça ca fonctionne pas le googleUser je sais pas comment le recuperer 
+// Alors ça ca fonctionne pas le googleUser je sais pas comment le recuperer
 // (apparement avec gapi c'est faisable mais j'y arrive pas !)
-function onSignIn(googleUser) {
+/*function onSignIn(googleUser) {
   var profile = googleUser.getBasicProfile();
   console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
   console.log('Name: ' + profile.getName());
   console.log('Image URL: ' + profile.getImageUrl());
   console.log('Email: ' + profile.getEmail());
-}
+}*/
