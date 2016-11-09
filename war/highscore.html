@@ -1,0 +1,31 @@
+<!-- Page des highscores avec le nom, l'id et le score -->
+<div id="index-banner" class="parallax-container">
+	<div class="section no-pad-bot">
+		<div class="container">
+			<br><br>
+			<h1 class="header center teal-text text-lighten-2">Highscore</h1>
+			<div class="card">
+            	<div class="card-content">
+					<table class="highlight">
+						<thead>
+							<tr>
+								<th data-field="id">Name</th>
+								<th data-field="price">Score</th>
+								<th data-field="price" ng-show="highscoreCategory">Category</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr ng-repeat="highscore in high">
+							  <td>{{highscore.name}}</td>
+							  <td>{{highscore.score}}</td>
+								<td ng-show="highscoreCategory">{{highscore.category}}</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+			<br><br>
+		</div>
+	</div>
+	<div class="background b3"></div>
+</div>

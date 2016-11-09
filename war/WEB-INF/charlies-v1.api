@@ -76,14 +76,14 @@
         "body" : "autoTemplate(backendResponse)"
       }
     },
-    "charlies.charliesEndpoint.listQuestions" : {
-      "path" : "/questions",
+    "charlies.charliesEndpoint.listHighscores" : {
+      "path" : "/highscores",
       "httpMethod" : "GET",
       "authLevel" : "NONE",
       "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
       "audiences" : [ ],
       "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
-      "rosyMethod" : "charlies.api.CharliesEndpoint.listQuestions",
+      "rosyMethod" : "charlies.api.CharliesEndpoint.listHighscores",
       "request" : {
         "parameters" : {
           "category" : {
@@ -103,19 +103,33 @@
         "body" : "autoTemplate(backendResponse)"
       }
     },
-    "charlies.charliesEndpoint.load" : {
-      "path" : "load",
+    "charlies.charliesEndpoint.insertScore" : {
+      "path" : "/addscore",
       "httpMethod" : "POST",
       "authLevel" : "NONE",
       "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
       "audiences" : [ ],
       "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
-      "rosyMethod" : "charlies.api.CharliesEndpoint.load",
+      "rosyMethod" : "charlies.api.CharliesEndpoint.insertScore",
       "request" : {
+        "parameters" : {
+          "category" : {
+            "type" : "string",
+            "required" : true
+          },
+          "name" : {
+            "type" : "string",
+            "required" : true
+          },
+          "score" : {
+            "type" : "int32",
+            "required" : true
+          }
+        },
         "body" : "empty"
       },
       "response" : {
-        "body" : "autoTemplate(backendResponse)"
+        "body" : "empty"
       }
     }
   },
@@ -210,10 +224,12 @@
           "$ref" : "QuizzSectionCollection"
         }
       },
-      "charlies.api.CharliesEndpoint.load" : {
+      "charlies.api.CharliesEndpoint.listHighscores" : {
         "response" : {
           "$ref" : "ScoreCollection"
         }
+      },
+      "charlies.api.CharliesEndpoint.insertScore" : {
       }
     }
   }
