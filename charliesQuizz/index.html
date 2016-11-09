@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html ng-app="appGame">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no"/>
+		<meta name="google-signin-scope" content="profile email">
+	<meta name="google-signin-client_id" content="801304487231-edgr07vjdh0tp436aofbms4mp3cpss03.apps.googleusercontent.com">
+
+		<title>Parallax Template - Materialize</title>
+
+		<!-- CSS  -->
+		<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+		<link href="css/materialize.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+		<link href="css/style.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+		<!--  Scripts-->
+		<script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+		<script src="js/materialize.js"></script>
+		<script src="js/init.js"></script>
+		<script src="js/angular.min.js"></script>
+		<script src="js/app.js"></script>
+		<script src="js/angular-google-gapi.min.js"></script>
+		<script src="https://apis.google.com/js/platform.js" async defer></script>
+	</head>
+	<body ng-controller="myController">
+
+		<main>
+			 <!-- Bouton pour les connexions aux comptes google -->
+			<div class="g-signin2 right" data-onsuccess="onSignIn">Google</div>
+			
+			<!-- "Header" soit la barre de menu -->
+			<nav class="white" role="navigation">
+				<div class="nav-wrapper container">
+					<a id="logo-container" href="#" class="brand-logo">Logo</a>
+					<ul class="right hide-on-med-and-down">
+						<li><a href="#">Navbar Link</a></li>
+					</ul>
+
+					<ul id="nav-mobile" class="side-nav">
+						<li><a href="#">Navbar Link</a></li>
+					</ul>
+					<a href="#" data-activates="nav-mobile" class="button-collapse"><i class="material-icons">menu</i></a>
+				</div>
+			</nav>
+
+			<!-- Page d'accueil avant de commencer a jouer -->
+			<div ng-show="page=='Accueil'">
+				<div id="index-banner" class="parallax-container">
+					<div class="section no-pad-bot">
+						<div class="container">
+							<br><br>
+							<h1 class="header center teal-text text-lighten-2">Charlie's Quizz</h1>
+							<div class="row center">
+								<h5 class="header col s12 light white-text">Answer the question ! Good luck !</h5>
+							</div>
+							<div class="row center">
+								<button class="btn-large waves-effect waves-light teal lighten-1" ng-click="category()">Play</button>
+							</div>
+							<br><br>
+						</div>
+					</div>
+					<div class="background b1"></div>
+				</div>
+			</div>
+
+			<!-- Page du choix de categories -->
+			<div ng-show="page=='category'">
+			  <div id="index-banner" class="parallax-container">
+					<div class="section no-pad-bot">
+						<div class="container">
+							<br><br>
+							<h1 class="header center teal-text text-lighten-2">Choose category</h1>
+							<ul class="collection" ng-repeat="categ in category.categ">
+								<a href="#" class="collection-item" ng-click="play()">{{categ}}</a>
+							</ul>
+							<br><br>
+						</div>
+					</div>
+					<div class="parallax"><img src="background2.jpg" alt="Unsplashed background img 1"></div>
+				</div>
+			</div>
+
+			<!-- Page play, avec la photo, la questions courantes, les differentes reponses ainsi que pour la questions où ? une maps  -->
+			<div ng-show="page=='play'">
+				<div id="index-banner" class="parallax-container">
+					<div class="section no-pad-bot">
+						<div class="container">
+							<br><br>
+							<h1 class="header center teal-text text-lighten-2">{{questions.question}}</h1>
+							<ul class="collection" ng-repeat="answer in questions.answers">
+								<a href="#" class="collection-item" ng-click="highscore()">{{answer}}</a>
+							</ul>
+							<br><br>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<!-- Page des highscores avec le nom, l'id et le score -->
+			<div ng-show="page=='highscore'">
+				<div id="index-banner" class="parallax-container">
+					<div class="section no-pad-bot">
+						<div class="container">
+							<br><br>
+							<h1 class="header center teal-text text-lighten-2">Highscore</h1>
+							<table class="highlight">
+								<thead>
+									<tr>
+										<th data-field="id">Name</th>
+										<th data-field="price">Score</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr ng-repeat="highscore in high">
+									  <td>{{highscore.name}}</td>
+									  <td>{{highscore.score}}</td>
+									</tr>
+								</tbody>
+							</table>
+							<br><br>
+						</div>
+					</div>
+					<div id="background"></div>
+					<!--<div class="parallax"><img src="background3.jpg" alt="Unsplashed background img 1"></div>-->
+				</div>
+			</div>
+		</main>
+		<footer class="page-footer teal">
+			<div class="footer-copyright">
+				<div class="container"> 
+					Made by <a class="brown-text text-lighten-3" href="http://materializecss.com">Materialize</a>
+				</div>
+			</div>
+		</footer>
+	</body>
+</html>
