@@ -4,20 +4,24 @@
 		<div class="container">
 			<br><br>
 			<h1 class="header center teal-text text-lighten-2">Highscore</h1>
-			<table class="highlight">
-				<thead>
-					<tr>
-						<th data-field="id" class="white-text">Name</th>
-						<th data-field="price" class="white-text">Score</th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr ng-repeat="highscore in high">
-					  <td>{{highscore.name}}</td>
-					  <td>{{highscore.score}}</td>
-					</tr>
-				</tbody>
-			</table>
+			<div class="card">
+            	<div class="card-content">
+					<table class="highlight">
+						<thead>
+							<tr>
+								<th data-field="id">Name</th>
+								<th data-field="price">Score</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr ng-repeat="highscore in high">
+							  <td>{{highscore.name}}</td>
+							  <td>{{highscore.score}}</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
 			<br><br>
 		</div>
 	</div>
