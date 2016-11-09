@@ -35,10 +35,14 @@ p {
 
 .b2 {
   background: url("../background2.jpg") no-repeat center fixed;
+  -webkit-background-size: cover;
+  background-size: cover;
 }
 
 .b3 {
   background: url("../background3.jpg") no-repeat center fixed;
+  -webkit-background-size: cover;
+  background-size: cover;
 }
 
 .icon-block {

@@ -3,21 +3,19 @@
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no"/>
-		<meta name="google-signin-scope" content="profile email">
-	<meta name="google-signin-client_id" content="801304487231-edgr07vjdh0tp436aofbms4mp3cpss03.apps.googleusercontent.com">
 
 		<title>Charlie's Quizz</title>
 
 		<!-- CSS  -->
 		<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-		<link href="css/materialize.css" type="text/css" rel="stylesheet" media="screen,projection"/>
-		<link href="css/style.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+		<link href="/assets/css/materialize.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+		<link href="/assets/css/style.css" type="text/css" rel="stylesheet" media="screen,projection"/>
 		<!--  Scripts-->
 		<script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
-		<script src="js/materialize.js"></script>
-		<script src="js/angular.min.js"></script>
-		<script src="js/app.js"></script>
-		<script src="js/angular-google-gapi.min.js"></script>
+		<script src="/assets/js/materialize.js"></script>
+		<script src="/assets/js/angular.min.js"></script>
+		<script src="/assets/js/app.js"></script>
+		<script src="/assets/js/angular-google-gapi.min.js"></script>
 		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-route.js"></script>
 		<!--<script src="https://apis.google.com/js/platform.js" async defer></script>-->
 	</head>
@@ -26,22 +24,22 @@
 		<header>
 			<nav class="white" role="navigation">
 				<div class="nav-wrapper container">
-					<a id="logo-container" href="#" class="brand-logo">Charlie's Quizz</a>
+					<a id="logo-container" href="#/" class="brand-logo">Charlie's Quizz</a>
 					<ul class="right hide-on-med-and-down">
-						<li><a href="#">Highscores</a></li>
+						<li><a href="#/highscores">Highscores</a></li>
 						<li>
 							<a data-onsuccess="onSignIn">
-								<img src="assets/img/g-logo.png" class="left" style="height: 22px; width: auto; margin-top: 20px; margin-right: 5px;">
+								<img src="/assets/img/g-logo.png" class="left" style="height: 22px; width: auto; margin-top: 20px; margin-right: 5px;">
 								<span>Google</span>
 							</a>
 						</li>
 					</ul>
 
 					<ul id="nav-mobile" class="side-nav">
-						<li><a href="#">Highscores</a></li>
+						<li><a href="#/highscores">Highscores</a></li>
 						<li>
 							<a data-onsuccess="onSignIn">
-								<img src="assets/img/g-logo.png" class="left" style="height: 22px; width: auto; margin-top: 20px; margin-right: 5px;">
+								<img src="/assets/img/g-logo.png" class="left" style="height: 22px; width: auto; margin-top: 20px; margin-right: 5px;">
 								<span>Google</span>
 							</a>
 						</li>
