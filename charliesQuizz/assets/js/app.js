@@ -149,20 +149,6 @@ app.controller('myController', ['$scope', '$location', '$cookies', 'GApi', 'GAut
 					$scope.finished = true;
 				}
 				break;
-			}
-		};
-
-		switch($scope.cursorQuestion) {
-			case "who":
-				$scope.cursorQuestion = "when";
-				break;
-			case "when":
-				$scope.cursorQuestion = "where";
-				break;
-			case "where":
-				$scope.cursorQuestion = "who";
-				$scope.cursorSection++;
-				break;
 		}
 	};
 
@@ -199,7 +185,7 @@ app.controller('myController', ['$scope', '$location', '$cookies', 'GApi', 'GAut
 	$scope.cursorQuestion = "who";
 	// score (a voir si on fait ca comme ca !)
 	$scope.myscore = 0;
-	
+
 }]);
 
 (function($) {
