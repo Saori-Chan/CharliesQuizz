@@ -55,22 +55,19 @@ app.controller('myController', ['$scope', '$location', '$cookies', 'GApi', 'GAut
 		}
 	);
 
-	$scope.play = function(){
-		var request = function() {
-			GApi.execute('charlies', 'charliesEndpoint.listQuestions',{number: 10, category:"scientist"}).then( function(resp) {
-				$scope.sparqlResult = resp.items;
-				$scope.nextQuestion();
-			  }, function() {
-				console.log("error :(");
-			});
-		};
+	$scope.game = function(category){
+		//Choix de category par le joueur
+		$scope.myCategory = $scope.category.categories[category];
 
-		if (!$scope.google_user) {
-			$scope.login(request);
-		} else {
-			request();
-		}
+		// Variable pour savoir si le quizz est fini
+		$scope.finished = false;
 
+		GApi.execute('charlies', 'charliesEndpoint.listQuestions',{number: 5, category: $scope.myCategory}).then( function(resp) {
+			$scope.sparqlResult = resp.items;
+			$scope.nextQuestion();
+		}, function() {
+			console.log("error :(");
+		});
 	};
 
 	$scope.login = function(callback) {
@@ -91,18 +88,43 @@ app.controller('myController', ['$scope', '$location', '$cookies', 'GApi', 'GAut
 		$cookies.remove("google_auth_id");
 	}
 
-	$scope.category = function(){
-		$location.path('/category');
+	$scope.play = function(){
 
-		$scope.category = {
-			categ: [
-				"Scientist",
-				"Monument",
-				"Autres"
-			]
-		};
+		var request = function() {
+			$location.path('/category');
+
+			// En attendant que le endpoint soit OK :
+			$scope.category = {
+				categories: [
+					"scientist",
+					"monument",
+					"autres"
+				]
+			};
+
+			console.log($scope.category);
+
+			// Ici je recupere les differentes categories
+			// GApi.execute('scoreEntityEndPoint', 'listCategory').then( function(resp) {
+			//       $scope.category = resp.items;
+			//     }, function() {
+			//       console.log("error :(");
+			//   });
+		}
+
+		console.log($scope.google_user)
+
+		if (!$scope.google_user) {
+			$scope.login(request);
+		} else {
+			request();
+		}
 	};
 
+	// Question suivantes
+	/* (selon le nb de question passé et
+		a quelle section du resultat sparql on en est !)
+	*/
 	$scope.nextQuestion = function() {
 		$location.path('/play');
 
@@ -132,12 +154,14 @@ app.controller('myController', ['$scope', '$location', '$cookies', 'GApi', 'GAut
 			case "where":
 				$scope.cursorQuestion = "who";
 				$scope.cursorSection++;
+				if($scope.sparqlResult.length <= $scope.cursorSection){
+					$scope.finished = true;
+				}
 				break;
 		}
 	};
 
 	// Valider la question (On a decider de mettre la premiere reponse bonne mais pas dans la vue)
-	// A revoir
 	$scope.valid = function(answer){
 		console.log(answer);
 		$scope.questions.answered = answer;
@@ -152,7 +176,7 @@ app.controller('myController', ['$scope', '$location', '$cookies', 'GApi', 'GAut
 		$location.path('/highscore');
 
 		// Recuperation des highscores
-		GApi.execute('charlies', 'charliesEndpoint.listHighscores', {category: "scientist"}).then( function(resp) {
+		GApi.execute('charlies', 'charliesEndpoint.listHighscores', {category: $scope.myCategory}).then( function(resp) {
 			console.log(resp);
 			$scope.high = resp.items;
 		}, function() {
@@ -160,16 +184,15 @@ app.controller('myController', ['$scope', '$location', '$cookies', 'GApi', 'GAut
 		});
 	};
 
-		// Variable qui gere les pages
-		$scope.page = 'Accueil';
-		// Variable pour recuperer les resultats sparql
-		$scope.sparqlResult = null;
-		// nbQuestion courant
-		$scope.cursorSection = 0;
-		//
-		$scope.cursorQuestion = "who";
-		// score (a voir si on fait ca comme ca !)
-		$scope.myscore = 0;
+	// Variable pour recuperer les resultats sparql
+	$scope.sparqlResult = null;
+	// nbQuestion courant
+	$scope.cursorSection = 0;
+	//
+	$scope.cursorQuestion = "who";
+	// score (a voir si on fait ca comme ca !)
+	$scope.myscore = 0;
+
 }]);
 
 (function($) {
