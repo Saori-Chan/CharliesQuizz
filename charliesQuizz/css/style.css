@@ -33,6 +33,14 @@ p {
   background: url("../background1.jpg") no-repeat center fixed;
 }
 
+.b2 {
+  background: url("../background2.jpg") no-repeat center fixed;
+}
+
+.b3 {
+  background: url("../background3.jpg") no-repeat center fixed;
+}
+
 .icon-block {
   padding: 0 15px;
 }

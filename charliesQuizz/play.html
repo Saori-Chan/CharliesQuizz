@@ -1,0 +1,13 @@
+<!-- Page play, avec la photo, la questions courantes, les differentes reponses ainsi que pour la questions où ? une maps  -->
+<div id="index-banner" class="parallax-container">
+	<div class="section no-pad-bot">
+		<div class="container">
+			<br><br>
+			<h1 class="header center teal-text text-lighten-2">{{questions.question}}</h1>
+			<ul class="collection" ng-repeat="answer in questions.answers">
+				<a href="#/highscore" class="collection-item" ng-click="highscore()">{{answer}}</a>
+			</ul>
+			<br><br>
+		</div>
+	</div>
+</div>
