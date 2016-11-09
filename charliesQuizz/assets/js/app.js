@@ -31,7 +31,12 @@ app.run(['GApi', 'GAuth',
 
 
 app.controller('myController', ['$scope', '$location', 'GApi', function($scope, $location, GApi){
-		$scope.play = function(){
+		$scope.play = function(category){
+			//Choix de category par le joueur
+			$scope.myCategory = $scope.category.categ[category];
+			
+			// Variable pour savoir si le quizz est fini
+			$scope.finished = false;
 
 			// Ici recuperation des questions à partir du endpoint
 			GApi.execute('charlies', 'charliesEndpoint.listQuestions',{number: 10, category:"scientist"}).then( function(resp) {
@@ -48,9 +53,9 @@ app.controller('myController', ['$scope', '$location', 'GApi', function($scope, 
 		  
 		  // En attendant que le endpoint soit OK :
 		  $scope.category = { 
-			categ: ["Scientist",
-			"Monument",
-			"Autres"]
+			categ: ["scientist",
+			"monument",
+			"autres"]
 		  };
 
 		  // Ici je recupere les differentes categories
@@ -103,6 +108,9 @@ app.controller('myController', ['$scope', '$location', 'GApi', function($scope, 
 				case "where":
 					$scope.cursorQuestion = "who";
 					$scope.cursorSection++;
+					if($scope.sparqlResult.length <= $scope.cursorSection){
+						$scope.finished = true;
+					}
 					break;
 			}
 		};
@@ -123,7 +131,7 @@ app.controller('myController', ['$scope', '$location', 'GApi', function($scope, 
 			$location.path('/highscore');
 
 			// Recuperation des highscores
-			GApi.execute('charlies', 'charliesEndpoint.listHighscores', {category: "scientist"}).then( function(resp) {
+			GApi.execute('charlies', 'charliesEndpoint.listHighscores', {category: $scope.myCategory}).then( function(resp) {
 				console.log(resp);
 				$scope.high = resp.items;
 			}, function() {

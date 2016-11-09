@@ -19,7 +19,8 @@
 									}" ng-click="valid($index)"><i class="ng-class:{'white-text': questions.answered !== false && ( questions.answered === $index || questions.good_answer === $index)}">{{answer}}</i></div>
 						</li>
 					</ul>
-					<a href="#/play" class="btn-large waves-effect waves-light teal lighten-1 right" ng-click="nextQuestion()" ng-show="questions.answered !== false">Next</a>
+					<a href="#/play" class="btn-large waves-effect waves-light teal lighten-1 right" ng-click="nextQuestion()" ng-show="questions.answered !== false && finished !== true">Next</a>
+					<a href="#/highscore" class="btn-large waves-effect waves-light teal lighten-1 right" ng-click="highscore()" ng-show="questions.answered !== false && finished === true">Show highscore</a>
 				</div>
 			</div>
 		</div>

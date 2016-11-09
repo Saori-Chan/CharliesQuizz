@@ -5,7 +5,7 @@
 			<br><br>
 			<h1 class="header center teal-text text-lighten-2">Choose category</h1>
 			<ul class="collection" ng-repeat="categ in category.categ">
-				<a href="#/play" class="collection-item" ng-click="play()">{{categ}}</a>
+				<a href="#/play" class="collection-item" ng-click="play($index)">{{categ}}</a>
 			</ul>
 			<br><br>
 		</div>
