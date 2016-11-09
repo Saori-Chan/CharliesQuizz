@@ -56,15 +56,12 @@ app.controller('myController', ['$scope', '$location', '$cookies', 'GApi', 'GAut
 	);
 
 	$scope.play = function(){
-		// Ici recuperation des questions à partir du endpoint
-		// Probleme endpoint et methode
-		GApi.execute('scoreEntityEndPoint', 'listQuestions').then( function(resp) {
-			console.log(resp);
+		GApi.execute('charlies', 'charliesEndpoint.listQuestions',{number: 10, category:"scientist"}).then( function(resp) {
 			$scope.sparqlResult = resp.items;
+			$scope.nextQuestion();
 		  }, function() {
 			console.log("error :(");
 		});
-	  	$scope.nextQuestion();
 	};
 
 	$scope.login = function() {
@@ -83,97 +80,89 @@ app.controller('myController', ['$scope', '$location', '$cookies', 'GApi', 'GAut
 	}
 
 	$scope.category = function(){
-	  $location.path('/category');
+		$location.path('/category');
 
-	  // En attendant que le endpoint soit OK :
-	  $scope.category = {
-		categ: ["Scientist",
-		"Monument",
-		"Autres"]
-	  };
-
-	  // Ici je recupere les differentes categories
-	  // GApi.execute('scoreEntityEndPoint', 'listCategory').then( function(resp) {
-	  //       $scope.category = resp.items;
-	  //     }, function() {
-	  //       console.log("error :(");
-	  //   });
+		$scope.category = {
+			categ: [
+				"Scientist",
+				"Monument",
+				"Autres"
+			]
+		};
 	};
 
-	// Question suivantes
-	/* (selon le nb de question passé et
-		a quelle section du resultat sparql on en est !)
-	*/
 	$scope.nextQuestion = function() {
 		$location.path('/play');
 
-		if ($scope.nbQuestion == 2){
-			$scope.nbQuestion = 0;
-			$scope.nbSection++;
-		}
-		 else{
-			$scope.nbQuestion++;
-			// $scope.questionAnswer = {
-			//   $scope.question: $scope.sparqlResult,
-			//   $scope.answers: [
-			//     "Do"
-			//   ]
-			// }
-		}
+		console.log($scope.sparqlResult);
 
-		$scope.questions = {
-			question: "Here you find the question..",
-			answers: [
-				"First",
-				"Second",
-				"Third"
-			],
-			good_answer: Math.floor(Math.random()*3),
-			answered: false
+		$scope.questions = $scope.sparqlResult[$scope.cursorSection][$scope.cursorQuestion];
+
+		$scope.questions.pic = $scope.sparqlResult[$scope.cursorSection].pic;
+		$scope.questions.answered = false;
+		$scope.good_answer = $scope.questions.answers[0];
+
+		$.randomize($scope.questions.answers);
+
+		for (var i = $scope.questions.answers.length - 1; i >= 0; i--) {
+			if($scope.questions.answers[i] == $scope.good_answer){
+				$scope.questions.good_answer = i;
+			}
 		};
+
+		switch($scope.cursorQuestion) {
+			case "who":
+				$scope.cursorQuestion = "when";
+				break;
+			case "when":
+				$scope.cursorQuestion = "where";
+				break;
+			case "where":
+				$scope.cursorQuestion = "who";
+				$scope.cursorSection++;
+				break;
+		}
 	};
 
-	// Validé la question (On a decider de mettre la premiere reponse bonne mais pas dans la vue)
+	// Valider la question (On a decider de mettre la premiere reponse bonne mais pas dans la vue)
 	// A revoir
 	$scope.valid = function(answer){
+		console.log(answer);
 		$scope.questions.answered = answer;
-		if ($scope.questions.good_answer == $scope.questions.answered) {
+		if ($scope.questions.good_answer == answer) {
 			$scope.myscore += 10;
 		};
-		$scope.nbQuestion++;
+		console.log($scope.myscore);
+		//$scope.nextQuestion();
 	};
 
 	$scope.highscore = function () {
 		$location.path('/highscore');
 
 		// Recuperation des highscores
-		GApi.execute('scoreentityendpoint', 'listScoreEntity').then( function(resp) {
+		GApi.execute('charlies', 'charliesEndpoint.listHighscores', {category: "scientist"}).then( function(resp) {
 			console.log(resp);
 			$scope.high = resp.items;
 		}, function() {
 			console.log("error :(");
 		});
-	}
+	};
 
-	// Variable qui gere les pages
-	$scope.page = 'Accueil';
-	// Variable pour recuperer les resultats sparql
-	$scope.sparqlResult;
-	// nbQuestion courant
-	$scope.nbQuestion = 0;
-	// nbSection courant
-	$scope.nbSection = 0;
-	// score (a voir si on fait ca comme ca !)
-	$scope.myscore = 0;
-	}
-]);
+		// Variable qui gere les pages
+		$scope.page = 'Accueil';
+		// Variable pour recuperer les resultats sparql
+		$scope.sparqlResult = null;
+		// nbQuestion courant
+		$scope.cursorSection = 0;
+		//
+		$scope.cursorQuestion = "who";
+		// score (a voir si on fait ca comme ca !)
+		$scope.myscore = 0;
+}]);
 
-// Alors ça ca fonctionne pas le googleUser je sais pas comment le recuperer
-// (apparement avec gapi c'est faisable mais j'y arrive pas !)
-/*function onSignIn(googleUser) {
-  var profile = googleUser.getBasicProfile();
-  console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
-  console.log('Name: ' + profile.getName());
-  console.log('Image URL: ' + profile.getImageUrl());
-  console.log('Email: ' + profile.getEmail());
-}*/
+(function($) {
+	$.randomize = function(arr){
+		for (var j, x, i = arr.length; i; j = parseInt(Math.random()*i), x = arr[--i], arr[i] = arr[j], arr[j] = x);
+		return arr;
+	};
+})(jQuery);
