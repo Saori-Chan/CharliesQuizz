@@ -167,10 +167,6 @@ app.controller('myController', ['$scope', '$location', '$cookies', 'GApi', 'GAut
 		if ($scope.questions.good_answer == answer) {
 			$scope.myscore += 10;
 		};
-<<<<<<< HEAD
-=======
-		//$scope.nextQuestion();
->>>>>>> 142eccd621959f28234906b4e19980a1d2212e72
 	};
 
 	$scope.highscore = function (highscoreCategory) {
@@ -186,11 +182,10 @@ app.controller('myController', ['$scope', '$location', '$cookies', 'GApi', 'GAut
 		});
 	};
 
-<<<<<<< HEAD
-  $scope.endGame = function() {
-    $location.path('/endgame');
-  }
-=======
+    $scope.endGame = function() {
+        $location.path('/endgame');
+    }
+
     $scope.initMap = function() {
         $scope.map_choice = null;
         var mapCanvas = document.getElementById("map");
@@ -242,7 +237,6 @@ app.controller('myController', ['$scope', '$location', '$cookies', 'GApi', 'GAut
             placeMarker(map, infowindow, event.latLng);
         });
     };
->>>>>>> 142eccd621959f28234906b4e19980a1d2212e72
 
 	// Variable pour recuperer les resultats sparql
 	$scope.sparqlResult = null;
