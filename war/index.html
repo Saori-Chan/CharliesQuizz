@@ -1,27 +1,62 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
-<!-- The HTML 4.01 Transitional DOCTYPE declaration-->
-<!-- above set at the top of the file will set     -->
-<!-- the browser's rendering engine into           -->
-<!-- "Quirks Mode". Replacing this declaration     -->
-<!-- with a "Standards Mode" doctype is supported, -->
-<!-- but may lead to some differences in layout.   -->
+<!DOCTYPE html>
+<html ng-app="appGame">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no"/>
 
-<html>
-  <head>
-    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
-    <title>Hello App Engine</title>
-  </head>
+		<title>Charlie's Quizz</title>
 
-  <body>
-    <h1>Hello App Engine!</h1>
-	
-    <table>
-      <tr>
-        <td colspan="2" style="font-weight:bold;">Available Servlets:</td>        
-      </tr>
-      <tr>
-        <td><a href="webandcloud">WebAndCloud</a></td>
-      </tr>
-    </table>
-  </body>
+		<!-- CSS  -->
+		<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+		<link href="/assets/css/materialize.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+		<link href="/assets/css/style.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+		<!--  Scripts-->
+		<script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+		<script src="/assets/js/materialize.js"></script>
+		<script src="/assets/js/angular.min.js"></script>
+		<script src="/assets/js/app.js"></script>
+		<script src="/assets/js/angular-google-gapi.js"></script>
+		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular-route.js"></script>
+		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular-cookies.js"></script>
+		<!--<script src="https://apis.google.com/js/platform.js" async defer></script>-->
+	</head>
+	<body ng-controller="myController">
+
+		<header>
+			<nav class="white" role="navigation">
+				<div class="nav-wrapper container">
+					<a id="logo-container" href="#/" class="brand-logo">Charlie's Quizz</a>
+					<ul class="right">
+						<li><a href="#/highscores">Highscores</a></li>
+						<li>
+							<a ng-click="login()" ng-show="google_user == null">
+								<img src="/assets/img/g-logo.png" class="left" style="height: 22px; width: auto; margin-top: 20px; margin-right: 5px;">
+								<span>Google</span>
+							</a>
+							<a class="black-text dropdown-button" ng-show="google_user != null" data-activates="dropdown">
+								<img ng-src="{{google_user.picture}}" class="left" style="height: 30px; margin-top: 20px; margin-right: 5px;">
+								{{ google_user.name }}
+								<i class="material-icons right">arrow_drop_down</i>
+							</a>
+						</li>
+					</ul>
+				</div>
+			</nav>
+			<ul id="dropdown" class="dropdown-content" style="margin-top: 64px;">
+				<li><a ng-click="logout()">Sign out</a></li>
+			</ul>
+		</header>
+
+		<main>
+			<div ng-view></div>
+		</main>
+
+		<footer class="page-footer teal">
+			<div class="footer-copyright">
+				<div class="container">
+					Made by Antoine, Maël, Margaux and Thibaud
+				</div>
+			</div>
+		</footer>
+	</body>
 </html>
