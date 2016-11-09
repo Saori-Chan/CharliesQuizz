@@ -25,27 +25,6 @@
     "maxAge" : 0
   },
   "methods" : {
-    "charlies.charliesEndpoint.listHighscores" : {
-      "path" : "/highscores",
-      "httpMethod" : "GET",
-      "authLevel" : "NONE",
-      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
-      "audiences" : [ ],
-      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
-      "rosyMethod" : "charlies.api.CharliesEndpoint.listHighscores",
-      "request" : {
-        "parameters" : {
-          "category" : {
-            "type" : "string",
-            "required" : true
-          }
-        },
-        "body" : "empty"
-      },
-      "response" : {
-        "body" : "autoTemplate(backendResponse)"
-      }
-    },
     "charlies.charliesEndpoint.insertScore" : {
       "path" : "/addscore",
       "httpMethod" : "POST",
@@ -75,6 +54,28 @@
         "body" : "empty"
       }
     },
+    "charlies.charliesEndpoint.listHighscores" : {
+      "path" : "/highscores",
+      "httpMethod" : "GET",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "charlies.api.CharliesEndpoint.listHighscores",
+      "request" : {
+        "parameters" : {
+          "category" : {
+            "type" : "string",
+            "required" : false,
+            "default" : ""
+          }
+        },
+        "body" : "empty"
+      },
+      "response" : {
+        "body" : "autoTemplate(backendResponse)"
+      }
+    },
     "charlies.charliesEndpoint.listQuestions" : {
       "path" : "/questions",
       "httpMethod" : "GET",
@@ -87,7 +88,13 @@
         "parameters" : {
           "category" : {
             "type" : "string",
-            "required" : true
+            "required" : false,
+            "default" : ""
+          },
+          "number" : {
+            "type" : "int32",
+            "required" : false,
+            "default" : "3"
           }
         },
         "body" : "empty"
@@ -151,29 +158,29 @@
           "pic" : {
             "type" : "string"
           },
-          "questionWho" : {
+          "who" : {
+            "$ref" : "QuestionBlock"
+          },
+          "when" : {
+            "$ref" : "QuestionBlock"
+          },
+          "where" : {
+            "$ref" : "QuestionBlock"
+          }
+        }
+      },
+      "QuestionBlock" : {
+        "id" : "QuestionBlock",
+        "type" : "object",
+        "properties" : {
+          "question" : {
             "type" : "string"
           },
-          "questionWhen" : {
-            "type" : "string"
-          },
-          "questionWhere" : {
-            "type" : "string"
-          },
-          "answersWho" : {
+          "answers" : {
             "type" : "array",
             "items" : {
               "type" : "string"
             }
-          },
-          "answersWhen" : {
-            "type" : "array",
-            "items" : {
-              "type" : "string"
-            }
-          },
-          "answerWhere" : {
-            "type" : "string"
           }
         }
       },
@@ -191,12 +198,12 @@
       }
     },
     "methods" : {
+      "charlies.api.CharliesEndpoint.insertScore" : {
+      },
       "charlies.api.CharliesEndpoint.listHighscores" : {
         "response" : {
           "$ref" : "ScoreCollection"
         }
-      },
-      "charlies.api.CharliesEndpoint.insertScore" : {
       },
       "charlies.api.CharliesEndpoint.listQuestions" : {
         "response" : {

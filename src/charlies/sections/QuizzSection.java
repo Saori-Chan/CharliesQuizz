@@ -5,27 +5,17 @@ import java.util.List;
 public abstract class QuizzSection {
 
 	private String pic;
-	private String questionWho;
-	private String questionWhen;
-	private String questionWhere;
-	private List<String> answersWho;
-	private List<String> answersWhen;
-	private String answerWhere;
-	
-	public QuizzSection(String pic, List<String> answersWho, List<String> answersWhen, String answerWhere) {
+	protected QuestionBlock who;
+	protected QuestionBlock when;
+	protected QuestionBlock where;
+		
+	public QuizzSection(String pic, List<String> whoAnswers, List<String> whenAnswers, List<String> whereAnswers) {
 		this.pic = pic;
-		this.questionWho = questionWho();
-		this.questionWhen = questionWhen();
-		this.questionWhere = questionWhere();
-		this.answersWho = answersWho;
-		this.answersWhen = answersWhen;
-		this.answerWhere = answerWhere;
+		this.who = new QuestionBlock(whoAnswers);
+		this.when = new QuestionBlock(whenAnswers);
+		this.where = new QuestionBlock(whereAnswers);
 	}
 
-	public abstract String questionWho();
-	public abstract String questionWhen();
-	public abstract String questionWhere();
-	
 	public String getPic() {
 		return pic;
 	}
@@ -34,52 +24,29 @@ public abstract class QuizzSection {
 		this.pic = pic;
 	}
 
-	public String getQuestionWho() {
-		return questionWho;
+	public QuestionBlock getWho() {
+		return who;
 	}
 
-	public void setQuestionWho(String questionWho) {
-		this.questionWho = questionWho;
+	public void setWho(QuestionBlock who) {
+		this.who = who;
 	}
 
-	public String getQuestionWhen() {
-		return questionWhen;
+	public QuestionBlock getWhen() {
+		return when;
 	}
 
-	public void setQuestionWhen(String questionWhen) {
-		this.questionWhen = questionWhen;
+	public void setWhen(QuestionBlock when) {
+		this.when = when;
 	}
 
-	public String getQuestionWhere() {
-		return questionWhere;
+	public QuestionBlock getWhere() {
+		return where;
 	}
 
-	public void setQuestionWhere(String questionWhere) {
-		this.questionWhere = questionWhere;
+	public void setWhere(QuestionBlock where) {
+		this.where = where;
 	}
 
-	public List<String> getAnswersWho() {
-		return answersWho;
-	}
-
-	public void setAnswersWho(List<String> answersWho) {
-		this.answersWho = answersWho;
-	}
-
-	public List<String> getAnswersWhen() {
-		return answersWhen;
-	}
-
-	public void setAnswersWhen(List<String> answersWhen) {
-		this.answersWhen = answersWhen;
-	}
-
-	public String getAnswerWhere() {
-		return answerWhere;
-	}
-
-	public void setAnswerWhere(String answerWhere) {
-		this.answerWhere = answerWhere;
-	}
-
+	
 }

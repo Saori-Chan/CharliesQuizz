@@ -19,7 +19,7 @@ public class CharliesServlet {
 				"PREFIX dbr: <http://dbpedia.org/resource/>" +
 				"PREFIX dbp: <http://dbpedia.org/property/>" +
 				"PREFIX dbo: <http://dbpedia.org/ontology/>" +
-				"select distinct ?birth ?pic ?name ?nat ?p" +
+				"select distinct ?birth ?name ?nat ?p" +
 				"where {" +
 				"?p a dbo:Scientist;" +
 				"   dbp:name ?name;" +
@@ -56,7 +56,6 @@ public class CharliesServlet {
 
 	public QuerySolution doQuery() {
 		
-		String ret = "<table>";
 		//TODO : trouver pourquoi la dernière variable de la requête est à null
 		//TMPFIX : ajout de ?p pour pallier au problème
 		String queryString = 

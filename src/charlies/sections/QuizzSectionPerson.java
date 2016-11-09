@@ -4,20 +4,11 @@ import java.util.List;
 
 public class QuizzSectionPerson extends QuizzSection{
 
-	public QuizzSectionPerson(String pic, List<String> answersWho, List<String> answersWhen, String answerWhere) {
+	public QuizzSectionPerson(String pic, List<String> answersWho, List<String> answersWhen, List<String> answerWhere) {
 		super(pic,answersWho, answersWhen, answerWhere);
-	}
-
-	public String questionWhere() {
-		return "Who is he/she ?";
-	}
-
-	public String questionWhen() {
-		return "When was he/she born ?";
-	}
-
-	public String questionWho() {
-		return "Where was he/she born ?";
+		this.who.setQuestion("Who is he/she?");
+		this.when.setQuestion("When was he/she born?");
+		this.where.setQuestion("Where was he/she born?");
 	}
 
 }
