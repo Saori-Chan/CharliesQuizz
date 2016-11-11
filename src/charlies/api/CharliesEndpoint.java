@@ -72,5 +72,9 @@ public class CharliesEndpoint {
 		this.highscores.add(s);
 		//TODO use a "storeInDataStore" function
 	}
+	
+	public List<String> listCategories(){
+		return generator.getCategories();
+	}
 
 }

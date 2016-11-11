@@ -17,7 +17,7 @@ public abstract class SectionGenerator {
 	protected String request;
 	
 	public SectionGenerator() {
-		this.request =  "PREFIX dbr: <http://dbpedia.org/resource/>" +
+		this.request = "PREFIX dbr: <http://dbpedia.org/resource/>" +
 						"PREFIX dbp: <http://dbpedia.org/property/>" +
 						"PREFIX dbo: <http://dbpedia.org/ontology/>";
 	}
@@ -26,7 +26,7 @@ public abstract class SectionGenerator {
 	
 	public List<QuerySolution> executeRequest(){
 		List<QuerySolution> solutions = new ArrayList<QuerySolution>();
-		Query query = QueryFactory.create(request);
+		Query query = QueryFactory.create(request.toString());
 		QueryExecution qexec = QueryExecutionFactory.sparqlService("http://dbpedia.org/sparql", query);
 		ResultSet results = qexec.execSelect();
 		while (results.hasNext()){
