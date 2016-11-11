@@ -98,7 +98,7 @@ app.controller('myController', ['$scope', '$location', '$cookies', 'GApi', 'GAut
 			// En attendant que le endpoint soit OK :
 			$scope.category = {
 				categories: [
-					"scientist",
+					"scientists",
 					"monument",
 					"autres"
 				]
