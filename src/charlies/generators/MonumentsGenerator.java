@@ -10,7 +10,7 @@ public class MonumentsGenerator extends SectionGenerator {
 	
 	public MonumentsGenerator() {
 		super();
-		request += "";//DBPEDIA REQUEST
+		//request += "";//DBPEDIA REQUEST
 	}
 
 	public List<QuizzSection> generate(int nb) {

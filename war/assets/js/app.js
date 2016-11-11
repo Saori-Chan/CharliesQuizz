@@ -6,7 +6,7 @@ app.run(['GAuth', 'GApi', 'GData', '$rootScope', '$cookies',
 
 		$rootScope.gdata = GData;
 
-		var CLIENT = '244115085310-dmd5grs3mat4dvirsggn800tr44l9vvd.apps.googleusercontent.com';
+		var CLIENT = '78472264515-sudi3vpi8tr2dqi4ug43pmn1vtd8dhuo.apps.googleusercontent.com';
 		var BASE = 'https://1-dot-helloworld44230.appspot.com/_ah/api';
 
 		GApi.load('charlies','v1',BASE).then(function(resp) {
@@ -98,14 +98,14 @@ app.controller('myController', ['$scope', '$location', '$cookies', 'GApi', 'GAut
 			// En attendant que le endpoint soit OK :
 			$scope.category = {
 				categories: [
-					"scientist",
-					"monument",
-					"autres"
+					"scientists",
+					"monuments",
+					"random"
 				]
 			};
 
 			// Ici je recupere les differentes categories
-			// GApi.execute('scoreEntityEndPoint', 'listCategory').then( function(resp) {
+			// GApi.execute('charlies', 'charliesEndpoint.listCategories').then( function(resp) {
 			//       $scope.category = resp.items;
 			//     }, function() {
 			//       console.log("error :(");

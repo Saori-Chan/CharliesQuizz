@@ -21,16 +21,16 @@ public class ScientistsGenerator extends SectionGenerator {
 						"		dbp:field dbr:Computer_science;" +
 						"		dbo:birthDate ?birth;" +
 						"		dbo:birthPlace ?country;" +
-						"		dbo:thumbnail ?pic." +
+						"		dbo:thumbnail ?pic ." +
 						"	?country a dbo:Country;" +
-						"    	  	 dbp:commonName ?nat." +
-						//"	FILTER NOT EXISTS {" +
-						//"		?p a dbo:Scientist;" +
-						//"   	   dbp:name ?name;" +
-						//"   	   dbp:field dbr:Computer_science." +
-						//"		FILTER REGEX(?name, ',')" +
-						//"	}" +
-						//"	FILTER REGEX(?birth,'-')" +
+						"    	  	 dbp:commonName ?nat ." +
+						"	FILTER NOT EXISTS {" +
+						"		?p a dbo:Scientist;" +
+						"   	   dbp:name ?name;" +
+						"   	   dbp:field dbr:Computer_science ." +
+						"		FILTER REGEX(?name, ',')" +
+						"	}" +
+						"	FILTER REGEX(?birth,'-')" +
 						"}";
 	}
 	
@@ -44,17 +44,29 @@ public class ScientistsGenerator extends SectionGenerator {
 		List<String> answersWhen;
 		List<String> answersWhere;
 		
-		QuerySolution sol;
-		int r;
+		QuerySolution sol, sol1, sol2;
+		int r, r1, r2;
 		
 		for (int i=0; i<nb; ++i){
 			answersWho = new ArrayList<String>();
 			answersWhen = new ArrayList<String>();
 			answersWhere = new ArrayList<String>();
 			r = (int)(Math.random() * solutions.size());
+			r1 = (int)(Math.random() * solutions.size());
+			r2 = (int)(Math.random() * solutions.size());
+			while (!(r != r1) && (r != r2)){
+				r1 = (int)(Math.random() * solutions.size());
+				r2 = (int)(Math.random() * solutions.size());
+			}
 			sol = solutions.get(r);
+			sol1 = solutions.get(r1);
+			sol2 = solutions.get(r2);
 			answersWho.add(sol.getLiteral("name").toString());
+			answersWho.add(sol1.getLiteral("name").toString());
+			answersWho.add(sol2.getLiteral("name").toString());
 			answersWhen.add(sol.getLiteral("birth").toString());
+			answersWhen.add(sol1.getLiteral("birth").toString());
+			answersWhen.add(sol2.getLiteral("birth").toString());
 			answersWhere.add(sol.getLiteral("nat").toString());
 			list.add(new QuizzSectionPerson(sol.getResource("pic").toString(), answersWho, answersWhen, answersWhere));
 		}
