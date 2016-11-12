@@ -38,9 +38,7 @@ public class CharliesEndpoint {
 	public List<Score> load(){
 		//TODO use a "loadFromDatastore" function/request.
 		List<Score> hs = new ArrayList<Score>();
-		hs.add(new Score("scientist", "michel", 152));
-		hs.add(new Score("battles", "carat", 158));
-		hs.add(new Score("scientist", "mael", 42));
+
 		return hs;
 	}
 		
@@ -67,8 +65,8 @@ public class CharliesEndpoint {
 	}
 	
 	@ApiMethod(path="/addscore")
-	public void insertScore(@Named("category") String category, @Named("name") String name, @Named("score") int score){
-		Score s = new Score(category, name, score);
+	public void insertScore(@Named("category") String category, @Named("pic") String pic, @Named("name") String name, @Named("score") int score){
+		Score s = new Score(category, pic, name, score);
 		this.highscores.add(s);
 		//TODO use a "storeInDataStore" function
 	}
