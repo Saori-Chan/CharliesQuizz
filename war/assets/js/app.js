@@ -115,19 +115,11 @@ app.controller('CategoriesController', ['$rootScope', '$scope', '$location', 'GA
 
         $scope.loading = false;
 
-        // En attendant que le endpoint soit OK :
-        $scope.categories= [
-            "scientists",
-            "monuments",
-            "random"
-        ];
-
-        //Ici je recupere les differentes categories
-        /*GApi.execute('charlies', 'charliesEndpoint.listCategories').then( function(resp) {
-            $scope.category = resp.items;
+        GApi.execute('charlies', 'charliesEndpoint.listCategories').then( function(resp) {
+            $scope.categories = resp.items;
         }, function() {
             console.log("error :(");
-        });*/
+        });
 
         $scope.choose = function(category_id) {
 

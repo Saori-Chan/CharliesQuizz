@@ -26,7 +26,7 @@
   },
   "methods" : {
     "charlies.charliesEndpoint.listCategories" : {
-      "path" : "string",
+      "path" : "/categories",
       "httpMethod" : "GET",
       "authLevel" : "NONE",
       "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
@@ -152,48 +152,6 @@
         "id" : "QuizzSection",
         "type" : "object",
         "properties" : {
-          "id" : {
-            "type" : "string"
-          },
-          "category" : {
-            "type" : "string"
-          },
-          "name" : {
-            "type" : "string"
-          },
-          "score" : {
-            "type" : "integer"
-          }
-        }
-      },
-      "ScoreCollection" : {
-        "id" : "ScoreCollection",
-        "type" : "object",
-        "properties" : {
-          "items" : {
-            "type" : "array",
-            "items" : {
-              "$ref" : "Score"
-            }
-          }
-        }
-      },
-      "StringCollection" : {
-        "id" : "StringCollection",
-        "type" : "object",
-        "properties" : {
-          "items" : {
-            "type" : "array",
-            "items" : {
-              "type" : "string"
-            }
-          }
-        }
-      },
-      "QuizzSection" : {
-        "id" : "QuizzSection",
-        "type" : "object",
-        "properties" : {
           "pic" : {
             "type" : "string"
           },
@@ -222,6 +180,48 @@
             }
           }
         }
+      },
+      "QuizzSectionCollection" : {
+        "id" : "QuizzSectionCollection",
+        "type" : "object",
+        "properties" : {
+          "items" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "QuizzSection"
+            }
+          }
+        }
+      },
+      "Score" : {
+        "id" : "Score",
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "string"
+          },
+          "category" : {
+            "type" : "string"
+          },
+          "name" : {
+            "type" : "string"
+          },
+          "score" : {
+            "type" : "integer"
+          }
+        }
+      },
+      "ScoreCollection" : {
+        "id" : "ScoreCollection",
+        "type" : "object",
+        "properties" : {
+          "items" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "Score"
+            }
+          }
+        }
       }
     },
     "methods" : {
@@ -246,8 +246,6 @@
         "response" : {
           "$ref" : "ScoreCollection"
         }
-      },
-      "charlies.api.CharliesEndpoint.insertScore" : {
       }
     }
   }
