@@ -67,7 +67,32 @@ public class ScientistsGenerator extends SectionGenerator {
 			answersWhen.add(sol.getLiteral("birth").toString());
 			answersWhen.add(sol1.getLiteral("birth").toString());
 			answersWhen.add(sol2.getLiteral("birth").toString());
-			answersWhere.add(sol.getLiteral("nat").toString());
+			
+			String location = sol.getLiteral("nat").toString();
+			switch (location){
+				case "Venda":
+					location = "South Africa";
+					break;
+				case "the United States":
+					location="United States";
+					break;
+				case "Sloviet Union":
+					location="Russia";
+					break;
+				case "Palestine":
+					location="Israel";
+					break;
+				case "West Germany":
+					location="Germany";
+					break;
+				case "Prussia":
+					location="Germany";
+					break;
+				case "Ukrainian SSR":
+					location="Russia";
+					break;
+			}
+			answersWhere.add(location);
 			list.add(new QuizzSectionPerson(sol.getResource("pic").toString(), answersWho, answersWhen, answersWhere));
 		}
 		return list;

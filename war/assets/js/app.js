@@ -99,7 +99,7 @@ app.controller('myController', ['$scope', '$location', '$cookies', 'GApi', 'GAut
 			$scope.category = {
 				categories: [
 					"scientists",
-					"monuments",
+					"battles",
 					"random"
 				]
 			};
