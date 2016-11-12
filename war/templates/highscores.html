@@ -4,24 +4,52 @@
 		<h1 class="header center teal-text text-lighten-2">Highscore</h1>
 		<div class="card">
         	<div class="card-content">
-				<table class="highlight">
-					<thead>
-						<tr>
-							<th data-field="place">#</th>
-							<th data-field="id">Name</th>
-							<th data-field="score">Score</th>
-							<th data-field="category" ng-show="highscoreCategory">Category</th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr ng-repeat="highscore in highscores">
-							<td>{{$index+1}}</td>
-							<td>{{highscore.name}}</td>
-							<td>{{highscore.score}}</td>
-							<td ng-show="highscoreCategory">{{highscore.category}}</td>
-						</tr>
-					</tbody>
-				</table>
+
+				<div class="row">
+				  	<div class="col s12">
+						<ul class="tabs">
+						  	<li class="tab col s3 ng-class:
+								{
+									'grey lighten-3': category === 'all'
+								}
+							" ng-repeat="category in categories"><a href="" ng-click="loadHighscores($index)">{{category}}</a></li>
+						</ul>
+				  	</div>
+					<div>
+						<table class="highlight" ng-show="selectHighscore">
+							<thead>
+								<tr>
+									<th data-field="place">#</th>
+									<th data-field="id">Name</th>
+									<th data-field="score">Score</th>
+									<th data-field="category" ng-show="highscoreCategory">Category</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr ng-repeat="highscore in highscores.scores" class="ng-class: {
+									'green lighten-3': highscores.score_player[0].place == $index+1
+								}">
+									<td>{{$index+1}}</td>
+									<td><img src="{{highscore.pic}}"> {{highscore.name}}</td>
+									<td>{{highscore.score}}</td>
+									<td ng-show="highscoreCategory">{{highscore.category}}</td>
+								</tr>
+								<tr ng-show="highscores.score_player[0].place > 10">
+									<td>...</td>
+									<td>...</td>
+									<td>...</td>
+									<td ng-show="highscoreCategory">{{highscore.category}}</td>
+								</tr>
+								<tr ng-repeat="highscore in highscores.score_player" class="green lighten-3" ng-show="highscores.score_player[0].place > 10">
+									<td>{{highscore.place}}</td>
+									<td>{{highscore.name}}</td>
+									<td>{{highscore.score}}</td>
+									<td ng-show="highscoreCategory">{{highscore.category}}</td>
+								</tr>
+							</tbody>
+						</table>
+					</div
+				</div>
 				<div ng-show="loading">
 					<br/><br/>
 					<div class="progress">

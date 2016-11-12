@@ -332,17 +332,44 @@ app.controller('EndGameController', ['$rootScope', '$scope', '$location',
 
 app.controller('HighscoresController', ['$scope', '$location', 'GApi',
     function($scope, $location, GApi) {
-
         $scope.loading = true;
 
-		GApi.execute('charlies', 'charliesEndpoint.listHighscores').then( function(resp) {
-			console.log(resp);
-			$scope.highscores = resp.items;
+        GApi.execute('charlies', 'charliesEndpoint.listCategories').then( function(resp) {
+            $scope.categories = resp.items;
+            $scope.categories.unshift("all");
             $scope.loading = false;
-		}, function() {
+        }, function() {
             $scope.loading = false;
-			console.log("error :(");
-		});
+            console.log("error :(");
+        });
+
+        $('ul.tabs').tabs();
+
+        $scope.loadHighscores = function(category_id) {
+            var category = $scope.categories[category_id];
+
+            $scope.selectHighscore = true;
+
+            if (category == "all") {
+                $scope.highscoreCategory = true;
+                GApi.execute('charlies', 'charliesEndpoint.listHighscores').then( function(resp) {
+        			$scope.highscores = resp.items;
+                    $scope.loading = false;
+        		}, function() {
+                    $scope.loading = false;
+        			console.log("error :(");
+        		});
+            }else {
+                $scope.highscoreCategory = false;
+                GApi.execute('charlies', 'charliesEndpoint.listHighscores', {category: category}).then( function(resp) {
+        			$scope.highscores = resp.items;
+                    $scope.loading = false;
+        		}, function() {
+                    $scope.loading = false;
+        			console.log("error :(");
+        		});
+            }
+        };
     }
 ]);
 
