@@ -19,7 +19,9 @@ public abstract class SectionGenerator {
 	public SectionGenerator() {
 		this.request = "PREFIX dbr: <http://dbpedia.org/resource/>" +
 						"PREFIX dbp: <http://dbpedia.org/property/>" +
-						"PREFIX dbo: <http://dbpedia.org/ontology/>";
+						"PREFIX dbo: <http://dbpedia.org/ontology/>" +
+						"PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>" +
+						"PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>";
 	}
 
 	public abstract List<QuizzSection> generate(int nb);

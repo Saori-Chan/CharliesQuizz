@@ -35,25 +35,25 @@ p {
 }
 
 .b1 {
-  background: url("../img/background1.jpg") no-repeat center fixed;
+  background: url("../img/background16.jpg") no-repeat center fixed;
   -webkit-background-size: cover;
   background-size: cover;
 }
 
 .b2 {
-  background: url("../img/background2.jpg") no-repeat center fixed;
+  background: url("../img/background19.jpg") no-repeat center fixed;
   -webkit-background-size: cover;
   background-size: cover;
 }
 
 .b3 {
-  background: url("../img/background3.jpg") no-repeat center fixed;
+  background: url("../img/background9.jpg") no-repeat center fixed;
   -webkit-background-size: cover;
   background-size: cover;
 }
 
 .b4 {
-  background: url("../img/background6.jpg") no-repeat center fixed;
+  background: url("../img/background18.jpg") no-repeat center fixed;
   -webkit-background-size: cover;
   background-size: cover;
 }

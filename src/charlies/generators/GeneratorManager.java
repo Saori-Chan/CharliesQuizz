@@ -14,7 +14,7 @@ public class GeneratorManager {
 	public GeneratorManager() {
 		this.categories = new ArrayList<String>();
 		this.categories.add("scientists");
-		this.categories.add("monuments");
+		this.categories.add("battles");
 	}
 
 	public List<QuizzSection> generate(int nb, String category) throws UnknownCategoryException{
@@ -22,8 +22,8 @@ public class GeneratorManager {
 			case "scientists" :
 				generator = new ScientistsGenerator();
 				break;
-			case "monuments" :
-				generator = new MonumentsGenerator();
+			case "battles" :
+				generator = new BattlesGenerator();
 				break;
 			default :
 		  		throw new UnknownCategoryException();
