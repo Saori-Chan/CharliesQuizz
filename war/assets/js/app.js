@@ -113,18 +113,20 @@ app.controller('CategoriesController', ['$rootScope', '$scope', '$location', 'GA
             return;
         }
 
-        $scope.loading = false;
+        $scope.loading = true;
 
         GApi.execute('charlies', 'charliesEndpoint.listCategories').then( function(resp) {
             $scope.categories = resp.items;
+            $scope.loading = false;
         }, function() {
+            $scope.loading = false;
             console.log("error :(");
         });
 
         $scope.choose = function(category_id) {
 
             var category = $scope.categories[category_id];
-            var count = 1;
+            var count = 2;
 
             // Create game object
             $rootScope.currentGame = {
@@ -177,10 +179,12 @@ app.controller('GameController', ['$rootScope', '$scope', '$routeParams', '$loca
             if ($scope.question.answered != null)
                 return;
 
+            $scope.timer.stop();
+
             $scope.question.answered = index;
 
             if ($scope.question.answered == $scope.question.right_answer) {
-                $rootScope.currentGame.score += 10;
+                $rootScope.currentGame.score += $scope.timer.percentage*5;
             }
 
             if ($scope.question_type == 'who')
@@ -209,7 +213,7 @@ app.controller('GameController', ['$rootScope', '$scope', '$routeParams', '$loca
         };
 
         $scope.nextSubject = function() {
-            $location.path('/game/round/'+($routeParams.index_round+1)+'/who');
+            $location.path('/game/round/'+(parseInt($routeParams.index_round)+1)+'/who');
         };
 
         $scope.setMapPick = function(pick) {
@@ -272,6 +276,26 @@ app.controller('GameController', ['$rootScope', '$scope', '$routeParams', '$loca
             });
         };
 
+        $scope.timer = {
+            percentage: 100,
+            id: null,
+            start: function() {
+                $scope.timer.id = setInterval(function() {
+                    $scope.timer.percentage -= 2;
+                    $scope.$apply();
+                    if ($scope.timer.percentage <= 0)
+                        $scope.timer.stop();
+                },200);
+            },
+            stop: function() {
+                if ($scope.timer.id != null) {
+                    clearInterval($scope.timer.id);
+                    $scope.timer.id = null;
+                    $scope.chooseAnswer("No answer");
+                }
+            }
+        };
+
         if ($scope.question_type != 'summary') {
             $scope.question = {
                 pic: subject.pic,
@@ -280,6 +304,8 @@ app.controller('GameController', ['$rootScope', '$scope', '$routeParams', '$loca
                 answers: $.randomize(subject[$scope.question_type].answers),
                 answered: null
             };
+
+            $scope.timer.start();
         }
 
         if ($scope.question_type == 'where') {

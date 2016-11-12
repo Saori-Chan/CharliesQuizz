@@ -32,6 +32,10 @@
 			<div class="col s12 m8">
 				<h1 class="header center teal-text text-lighten-2">{{question.title}}</h1>
 
+				<div class="progress" style="height: 10px; border-radius: 10px;">
+					<div class="determinate blue" ng-style="{'width': timer.percentage + '%'}"></div>
+				</div>
+
 				<ul class="collection" ng-repeat="answer in question.answers" ng-show="question_type != 'where'">
 					<li ng-click="chooseAnswer(answer)" class="collection-item ng-class: {
 							'grey-hover hover': question.answered == null,
