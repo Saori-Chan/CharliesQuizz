@@ -39,7 +39,7 @@ public class CharliesEndpoint {
 		//TODO use a "loadFromDatastore" function/request.
 		List<Score> hs = new ArrayList<Score>();
 		hs.add(new Score("scientist", "michel", 152));
-		hs.add(new Score("monuments", "carat", 158));
+		hs.add(new Score("battles", "carat", 158));
 		hs.add(new Score("scientist", "mael", 42));
 		return hs;
 	}
@@ -73,6 +73,7 @@ public class CharliesEndpoint {
 		//TODO use a "storeInDataStore" function
 	}
 	
+	@ApiMethod(path="/categories")
 	public List<String> listCategories(){
 		return generator.getCategories();
 	}

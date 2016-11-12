@@ -5,35 +5,42 @@ import java.util.List;
 
 import javax.persistence.NoResultException;
 
-import charlies.sections.QuizzSection;
-import charlies.sections.QuizzSectionEvent;
-
 import com.hp.hpl.jena.query.QuerySolution;
 
-public class BattlesGenerator extends SectionGenerator {
-	
-	public BattlesGenerator() {
-		super();
-		request += "select ?pic ?nameBattle ?date ?c ?com ?p" +
-				   "where {" +
-				   "?p a dbo:MilitaryConflict;" +
-				   "   dbo:thumbnail ?pic;" +
-				   "   dbp:conflict ?nameBattle;" +
-				   "   dbo:date ?date;" +
-				   "   dbp:place ?country;" +
-				   "   dbo:commander ?commandant." +
-				   "?country a dbo:Country;" +
-				   "         dbp:commonName ?c." +
-				   "?commandant dbp:name ?com." +
-				   "FILTER NOT EXISTS {" +
-				   "   ?p a dbo:MilitaryConflict;" +
-				   "      dbo:date ?date." +
-				   "   FILTER regex(?date,'--')" +
-				   "}" +
-				   "FILTER (?date > '1700-01-01'^^xsd:date)" +
-				   "}";
-	}
+import charlies.sections.QuizzSection;
+import charlies.sections.QuizzSectionPerson;
 
+public class AthletesGenerator extends SectionGenerator {
+
+	public AthletesGenerator(){
+		super();
+		this.request += "select DISTINCT ?name ?date ?c ?pic ?p" +
+						"where {" +
+						"{" + 
+						"   ?p a dbo:Athlete;" +
+						"  	   dbp:name ?name;" +
+						"	   dbp:birthDate ?date;" +
+						"	   dbp:birthPlace ?country;" +
+						" 	   dbo:thumbnail ?pic." +
+						"   ?x dbp:gold ?p." +
+						"   ?country a dbo:Country;" +
+						"            dbp:commonName ?c." +
+						"   FILTER NOT EXISTS {" +
+						"      ?p a dbo:Athlete;" +
+						"         dbp:name ?name." +
+						"      ?x dbp:gold ?p." +
+						"      FILTER regex(?name,',')" +
+						"	}" +
+						"}" +
+						"FILTER NOT EXISTS {" +
+						"   ?p a dbo:Athlete;" +
+						"      dbp:birthDate ?date." +
+						"   ?x dbp:gold ?p." +
+						"   FILTER regex(?date,'--')" +
+						"}" +
+						"}"; 		
+	}
+	
 	public List<QuizzSection> generate(int nb) {
 		List<QuizzSection> list = new ArrayList<QuizzSection>();
 		List<QuerySolution> solutions = executeRequest();
@@ -61,18 +68,19 @@ public class BattlesGenerator extends SectionGenerator {
 			sol = solutions.get(r);
 			sol1 = solutions.get(r1);
 			sol2 = solutions.get(r2);
-			answersWho.add(sol.getLiteral("com").toString());
-			answersWho.add(sol1.getLiteral("com").toString());
-			answersWho.add(sol2.getLiteral("com").toString());
+			answersWho.add(sol.getLiteral("name").toString());
+			answersWho.add(sol1.getLiteral("name").toString());
+			answersWho.add(sol2.getLiteral("name").toString());
 			answersWhen.add(sol.getLiteral("date").toString());
 			answersWhen.add(sol1.getLiteral("date").toString());
 			answersWhen.add(sol2.getLiteral("date").toString());
+			
 			String location = sol.getLiteral("c").toString();
 			switch (location){
 				
 			}
 			answersWhere.add(location);
-			list.add(new QuizzSectionEvent(sol.getResource("pic").toString(), answersWho, answersWhen, answersWhere));
+			list.add(new QuizzSectionPerson(sol.getResource("pic").toString(), answersWho, answersWhen, answersWhere));
 		}
 		return list;
 	}
