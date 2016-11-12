@@ -1,20 +1,23 @@
+
+/* Hard Coded stuff */
+var CLIENT = '78472264515-sudi3vpi8tr2dqi4ug43pmn1vtd8dhuo.apps.googleusercontent.com';
+var BASE = 'https://1-dot-helloworld44230.appspot.com/_ah/api';
+
+
 var app = angular.module('appGame', ['angular-google-gapi', 'ngRoute', 'ngCookies']);
 
-// Charger gapi avec angular
-app.run(['GAuth', 'GApi', 'GData', '$rootScope', '$cookies',
-    function(GAuth, GApi, GData, $rootScope, $cookies) {
+// Load GAPI into angular
+app.run(['$rootScope', '$cookies', 'GApi', 'GData', 'GAuth',
+    function($rootScope, $cookies, GApi, GData, GAuth) {
 
-		$rootScope.gdata = GData;
-
-		var CLIENT = '78472264515-sudi3vpi8tr2dqi4ug43pmn1vtd8dhuo.apps.googleusercontent.com';
-		var BASE = 'https://1-dot-helloworld44230.appspot.com/_ah/api';
-
-		GApi.load('charlies','v1',BASE).then(function(resp) {
-			console.log('api: ' + resp.api + ', version: ' + resp.version + ' loaded');
-		},
-		function(resp) {
-			console.log('an error occured during loading api: ' + resp.api + ', resp.version: ' + version);
-		});
+        GApi.load('charlies','v1',BASE).then(
+            function(resp) {
+    			console.log('Api: ' + resp.api + ', version: ' + resp.version + ' loaded');
+    		},
+    		function(resp) {
+    			console.log('An error occured while loading api: ' + resp.api + ', resp.version: ' + resp.version);
+    		}
+        );
 
 		GAuth.setClient(CLIENT);
 		GAuth.setScope('https://www.googleapis.com/auth/userinfo.profile');
@@ -24,232 +27,306 @@ app.run(['GAuth', 'GApi', 'GData', '$rootScope', '$cookies',
 		if ($cookies.get("google_auth_id")) {
 			GData.setUserId($cookies.get("google_auth_id"));
 		}
+
+
+        $rootScope.login = function(callback) {
+    		GAuth.login().then(function(user) {
+    			$rootScope.google_user = user;
+    			$cookies.put("google_auth_id", user.id);
+    			if (callback) {
+    				callback();
+    			}
+    		}, function() {
+    			console.log('fail');
+    		});
+    	};
+
+        $rootScope.logout = function() {
+            GAuth.logout();
+    		$rootScope.google_user = null;
+    		$cookies.remove("google_auth_id");
+        };
+
+        GAuth.checkAuth().then(
+    		function(user) {
+    			$rootScope.google_user = user;
+    		},
+    		function() {
+    			console.log('error');
+    		}
+    	);
+
+        $rootScope.currentGame = null;
 	}
 ]);
 
 app.config(function($routeProvider) {
 	$routeProvider
 	.when("/", {
-		templateUrl : "accueil.html"
+		templateUrl: "templates/home.html",
+        controller: "HomeController"
 	})
-	.when("/category", {
-		templateUrl : "category.html"
+	.when("/categories", {
+		templateUrl: "templates/categories.html",
+        controller: "CategoriesController"
 	})
-	.when("/highscores", {
-		templateUrl : "highscore.html"
-	})
-	.when("/play", {
-		templateUrl : "play.html"
-	})
-  .when("/endgame", {
-    templateUrl : "endgame.html"
-  });
+    .when("/game/round/:index_round/:question_type", {
+        templateUrl: "templates/round.html",
+        controller: "GameController"
+    })
+    .when("/game/end", {
+        templateUrl: "templates/endgame.html",
+        controller: "EndGameController"
+    })
+    .when("/highscores", {
+        templateUrl: "templates/highscores.html",
+        controller: "HighscoresController"
+    })
 });
 
-app.controller('myController', ['$scope', '$location', '$cookies', 'GApi', 'GAuth', 'GData', function($scope, $location, $cookies, GApi, GAuth, GData){
+/* Home Controller */
 
-	GAuth.checkAuth().then(
-		function(user) {
-			$scope.google_user = user;
-		},
-		function() {
-			console.log('error');
-		}
-	);
+app.controller('HomeController', ['$scope', '$location',
+    function($scope, $location) {
 
-	$scope.game = function(category){
-		//Choix de category par le joueur
-		$scope.myCategory = $scope.category.categories[category];
+        $scope.play = function() {
 
-		// Variable pour savoir si le quizz est fini
-		$scope.finished = false;
+    		if (!$scope.google_user) {
+    			$scope.login(function() {
+                    $location.path('/categories');
+                });
+    		} else {
+    			$location.path('/categories');
+    		}
+        };
 
-		GApi.execute('charlies', 'charliesEndpoint.listQuestions',{number: 1, category: $scope.myCategory}).then( function(resp) {
-			$scope.sparqlResult = resp.items;
-			$scope.nextQuestion();
-		}, function() {
-			console.log("error :(");
-		});
-	};
+    }
+]);
 
-	$scope.login = function(callback) {
-		GAuth.login().then(function(user) {
-			$scope.google_user = user;
-			$cookies.put("google_auth_id", user.id);
-			if (callback) {
-				callback();
-			}
-		}, function() {
-			console.log('fail');
-		});
-	};
+/* CategoriesController */
 
-	$scope.logout = function() {
-		GAuth.logout();
-		$scope.google_user = null;
-		$cookies.remove("google_auth_id");
-	}
+app.controller('CategoriesController', ['$rootScope', '$scope', '$location', 'GApi',
+    function($rootScope, $scope, $location, GApi) {
 
-	$scope.play = function(){
+        if (!$scope.google_user) {
+            $location.path('/');
+            return;
+        }
 
-		var request = function() {
-			$location.path('/category');
+        $scope.loading = false;
 
-			// En attendant que le endpoint soit OK :
-			$scope.category = {
-				categories: [
-					"scientists",
-					"monuments",
-					"random"
-				]
-			};
+        // En attendant que le endpoint soit OK :
+        $scope.categories= [
+            "scientists",
+            "monuments",
+            "random"
+        ];
 
-			// Ici je recupere les differentes categories
-			// GApi.execute('charlies', 'charliesEndpoint.listCategories').then( function(resp) {
-			//       $scope.category = resp.items;
-			//     }, function() {
-			//       console.log("error :(");
-			//   });
-		}
+        //Ici je recupere les differentes categories
+        /*GApi.execute('charlies', 'charliesEndpoint.listCategories').then( function(resp) {
+            $scope.category = resp.items;
+        }, function() {
+            console.log("error :(");
+        });*/
 
-		if (!$scope.google_user) {
-			$scope.login(request);
-		} else {
-			request();
-		}
-	};
+        $scope.choose = function(category_id) {
 
-	// Question suivantes
-	/* (selon le nb de question passé et
-		a quelle section du resultat sparql on en est !)
-	*/
-	$scope.nextQuestion = function() {
-		$location.path('/play');
+            var category = $scope.categories[category_id];
+            var count = 1;
 
-        switch($scope.cursorQuestion) {
-			case "who":
-				$scope.cursorQuestion = "when";
-				break;
-			case "when":
-				$scope.cursorQuestion = "where";
-				break;
-			case "where":
-				$scope.cursorQuestion = "who";
-				$scope.cursorSection++;
-				if($scope.sparqlResult.length <= $scope.cursorSection){
-					$scope.finished = true;
-				}
-				break;
-		}
+            // Create game object
+            $rootScope.currentGame = {
+                category: category,
+                count: count,
+                score: 0
+            };
 
-		$scope.questions = $scope.sparqlResult[$scope.cursorSection][$scope.cursorQuestion];
+            $scope.loading = true;
 
-		$scope.questions.pic = $scope.sparqlResult[$scope.cursorSection].pic;
-		$scope.questions.answered = false;
-		$scope.good_answer = $scope.questions.answers[0];
+            GApi.execute('charlies', 'charliesEndpoint.listQuestions',{number: count, category: category}).then( function(resp) {
+                $rootScope.currentGame.subjects = resp.items;
+                console.log(resp.items);
+                $location.path('/game/round/0/who');
+    		}, function() {
+                $scope.loading = false;
+    			console.log("error :(");
+    		});
 
-		$.randomize($scope.questions.answers);
+        };
 
-		for (var i = $scope.questions.answers.length - 1; i >= 0; i--) {
-			if($scope.questions.answers[i] == $scope.good_answer){
-				$scope.questions.good_answer = i;
-			}
-		};
+    }
+]);
 
-        if ($scope.cursorQuestion == "where") {
+/* GameController */
+
+app.controller('GameController', ['$rootScope', '$scope', '$routeParams', '$location',
+    function($rootScope, $scope, $routeParams, $location) {
+
+        // Redirect if refreshed
+        if (!$routeParams.index_round ||
+            !$routeParams.question_type ||
+            !$rootScope.currentGame) {
+            $location.path('/categories');
+            return;
+        }
+
+        var subject = $rootScope.currentGame.subjects[$routeParams.index_round];
+
+        if (!subject) {
+            $location.path('/game/end');
+            return;
+        }
+
+        $scope.subject = subject;
+        $scope.question_type = $routeParams.question_type;
+
+        $scope.chooseAnswer = function(index) {
+
+            if ($scope.question.answered != null)
+                return;
+
+            $scope.question.answered = index;
+
+            if ($scope.question.answered == $scope.question.right_answer) {
+                $rootScope.currentGame.score += 10;
+            }
+
+            if ($scope.question_type == 'who')
+                subject.name = $scope.question.right_answer;
+            else if ($scope.question_type == 'when')
+                subject.date = $scope.question.right_answer;
+            else if ($scope.question_type == 'where')
+                subject.location = $scope.question.right_answer;
+        };
+
+        $scope.next = function() {
+
+            switch($scope.question_type) {
+                case 'who':
+                    $routeParams.question_type = 'when';
+                    break;
+                case 'when':
+                    $routeParams.question_type = 'where';
+                    break;
+                case 'where':
+                    $routeParams.question_type = 'summary';
+                    break;
+            }
+
+            $location.path('/game/round/'+$routeParams.index_round+'/'+$routeParams.question_type);
+        };
+
+        $scope.nextSubject = function() {
+            $location.path('/game/round/'+($routeParams.index_round+1)+'/who');
+        };
+
+        $scope.setMapPick = function(pick) {
+            $scope.map_pick = pick;
+            $scope.$apply();
+        };
+
+        $scope.initMap = function() {
+            $scope.map_choice = null;
+            var mapCanvas = document.getElementById("map");
+            var myCenter= new google.maps.LatLng(31.6341600,-7.9999400);
+            var mapOptions = {center: myCenter, zoom: 2};
+            var map = new google.maps.Map(mapCanvas, mapOptions);
+            var infowindow = new google.maps.InfoWindow();
+
+            function placeMarker(map,infowindow, location, fn) {
+                var marker = new google.maps.Marker({
+                    position: location,
+                    map: map,
+                    draggable: true
+                });
+                var latLng = new google.maps.LatLng(marker.position.lat(),marker.position.lng());
+
+                infowindow.open(map,marker);
+                geocoderLatLng(map,infowindow,latLng);
+
+                google.maps.event.addListener(marker,'dragend', function(event) {
+                    latLng = new google.maps.LatLng(marker.position.lat(),marker.position.lng());
+                    geocoderLatLng(map,infowindow,latLng);
+                });
+            };
+
+            function geocoderLatLng(map, infowindow,latLng) {
+                var geocoder = new google.maps.Geocoder;
+                geocoder.geocode({'location':latLng}, function(results, status) {
+                    if(status === google.maps.GeocoderStatus.OK) {
+                        if (results[1]) {
+                            var i = 0;
+                            while(results[1].address_components[i].types[0] != "country") {
+                                i++;
+                            }
+                            var country = results[1].address_components[i].long_name;
+                            infowindow.setContent(country);
+                            $scope.setMapPick(country);
+                        } else {
+                            console.error('No results found');
+                            infowindow.setContent("");
+                            $scope.setMapPick(null);
+                        }
+                    } else {
+                        console.error('Geocoder failed due to: ' + status);
+                        infowindow.setContent("");
+                        $scope.setMapPick(null);
+                    }
+                });
+            };
+
+            google.maps.event.addListenerOnce(map, 'click', function(event) {
+                placeMarker(map, infowindow, event.latLng);
+            });
+        };
+
+        if ($scope.question_type != 'summary') {
+            $scope.question = {
+                pic: subject.pic,
+                title: subject[$scope.question_type].question,
+                right_answer: subject[$scope.question_type].answers[0],
+                answers: $.randomize(subject[$scope.question_type].answers),
+                answered: null
+            };
+        }
+
+        if ($scope.question_type == 'where') {
             $scope.initMap();
         }
-	};
+    }
+]);
 
-	// Valider la question (On a decider de mettre la premiere reponse bonne mais pas dans la vue)
-	$scope.valid = function(answer){
-		$scope.questions.answered = answer;
-		if ($scope.questions.good_answer == answer) {
-			$scope.myscore += 10;
-		};
-	};
+/* EndGameController */
 
-	$scope.highscore = function (highscoreCategory) {
-		$location.path('/highscore');
-    console.log(highscoreCategory);
+app.controller('EndGameController', ['$rootScope', '$scope', '$location',
+    function($rootScope, $scope, $location) {
 
-		// Recuperation des highscores
+        // Redirect if refreshed
+        if (!$rootScope.currentGame) {
+            $location.path('/');
+            return;
+        }
+
+    }
+]);
+
+/* HighscoresController */
+
+app.controller('HighscoresController', ['$scope', '$location', 'GApi',
+    function($scope, $location, GApi) {
+
+        $scope.loading = true;
+
 		GApi.execute('charlies', 'charliesEndpoint.listHighscores').then( function(resp) {
 			console.log(resp);
-			$scope.high = resp.items;
+			$scope.highscores = resp.items;
+            $scope.loading = false;
 		}, function() {
+            $scope.loading = false;
 			console.log("error :(");
 		});
-	};
-
-    $scope.endGame = function() {
-        $location.path('/endgame');
     }
-
-    $scope.initMap = function() {
-        $scope.map_choice = null;
-        var mapCanvas = document.getElementById("map");
-        var myCenter= new google.maps.LatLng(31.6341600,-7.9999400);
-        var mapOptions = {center: myCenter, zoom: 2};
-        var map = new google.maps.Map(mapCanvas, mapOptions);
-        var infowindow = new google.maps.InfoWindow();
-
-        function placeMarker(map,infowindow, location, fn) {
-            var marker = new google.maps.Marker({
-                position: location,
-                map: map,
-                draggable: true
-            });
-            var latLng = new google.maps.LatLng(marker.position.lat(),marker.position.lng());
-
-            infowindow.open(map,marker);
-            geocoderLatLng(map,infowindow,latLng);
-
-            google.maps.event.addListener(marker,'dragend', function(event) {
-                latLng = new google.maps.LatLng(marker.position.lat(),marker.position.lng());
-                geocoderLatLng(map,infowindow,latLng);
-            });
-        };
-
-        function geocoderLatLng(map, infowindow,latLng) {
-            var geocoder = new google.maps.Geocoder;
-            geocoder.geocode({'location':latLng}, function(results, status) {
-                if(status === google.maps.GeocoderStatus.OK) {
-                    if (results[1]) {
-                        var i = 0;
-                        while(results[1].address_components[i].types[0] != "country") {
-                            i++;
-                        }
-                        var country = results[1].address_components[i].long_name;
-                        infowindow.setContent(country);
-                        $scope.map_choice = country;
-                        $scope.$apply();
-                    } else {
-                        console.error('No results found');
-                    }
-                } else {
-                    console.error('Geocoder failed due to: ' + status);
-                }
-            });
-        };
-
-        google.maps.event.addListenerOnce(map, 'click', function(event) {
-            placeMarker(map, infowindow, event.latLng);
-        });
-    };
-
-	// Variable pour recuperer les resultats sparql
-	$scope.sparqlResult = null;
-	// nbQuestion courant
-	$scope.cursorSection = -1;
-	//
-	$scope.cursorQuestion = "where";
-	// score (a voir si on fait ca comme ca !)
-	$scope.myscore = 0;
-
-    $scope.map_choice = "France";
-
-}]);
+]);
 
 (function($) {
 	$.randomize = function(arr){

@@ -1,0 +1,37 @@
+<div class="section">
+	<div class="container">
+		<br><br>
+		<h1 class="header center teal-text text-lighten-2">Highscore</h1>
+		<div class="card">
+        	<div class="card-content">
+				<table class="highlight">
+					<thead>
+						<tr>
+							<th data-field="place">#</th>
+							<th data-field="id">Name</th>
+							<th data-field="score">Score</th>
+							<th data-field="category" ng-show="highscoreCategory">Category</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr ng-repeat="highscore in highscores">
+							<td>{{$index+1}}</td>
+							<td>{{highscore.name}}</td>
+							<td>{{highscore.score}}</td>
+							<td ng-show="highscoreCategory">{{highscore.category}}</td>
+						</tr>
+					</tbody>
+				</table>
+				<div ng-show="loading">
+					<br/><br/>
+					<div class="progress">
+						<div class="indeterminate"></div>
+					</div>
+					<br/><br>
+				</div>
+			</div>
+		</div>
+		<br><br>
+	</div>
+</div>
+<div class="background b3"></div>
