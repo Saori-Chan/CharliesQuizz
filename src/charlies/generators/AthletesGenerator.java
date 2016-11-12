@@ -75,10 +75,7 @@ public class AthletesGenerator extends SectionGenerator {
 			answersWhen.add(sol1.getLiteral("date").toString());
 			answersWhen.add(sol2.getLiteral("date").toString());
 			
-			String location = sol.getLiteral("c").toString();
-			switch (location){
-				
-			}
+			String location = super.fixLocation(sol.getLiteral("c").toString());
 			answersWhere.add(location);
 			list.add(new QuizzSectionPerson(sol.getResource("pic").toString(), answersWho, answersWhen, answersWhere));
 		}
