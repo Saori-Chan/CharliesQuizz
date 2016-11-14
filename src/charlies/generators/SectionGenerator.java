@@ -10,13 +10,15 @@ import com.hp.hpl.jena.query.QueryFactory;
 import com.hp.hpl.jena.query.QuerySolution;
 import com.hp.hpl.jena.query.ResultSet;
 
+import charlies.exceptions.NoResultException;
 import charlies.sections.QuizzSection;
 
 public abstract class SectionGenerator {
 
 	protected String request;
+	protected int nbAnswers;
 	
-	public SectionGenerator() {
+	public SectionGenerator(int nbAnswers) {
 		this.request = "PREFIX dbr: <http://dbpedia.org/resource/>" +
 						"PREFIX dbp: <http://dbpedia.org/property/>" +
 						"PREFIX dbo: <http://dbpedia.org/ontology/>" +
@@ -24,7 +26,7 @@ public abstract class SectionGenerator {
 						"PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>";
 	}
 
-	public abstract List<QuizzSection> generate(int nb);
+	public abstract List<QuizzSection> generate(int nb) throws NoResultException;
 	
 	public List<QuerySolution> executeRequest(){
 		List<QuerySolution> solutions = new ArrayList<QuerySolution>();

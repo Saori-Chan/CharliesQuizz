@@ -4,10 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import charlies.entities.Score;
+import charlies.exceptions.NoResultException;
 import charlies.exceptions.UnknownCategoryException;
 import charlies.generators.GeneratorManager;
 import charlies.sections.QuizzSection;
-import charlies.sections.QuizzSectionPerson;
 
 import com.google.api.server.spi.config.Api;
 import com.google.api.server.spi.config.ApiMethod;
@@ -43,8 +43,8 @@ public class CharliesEndpoint {
 	}
 		
 	@ApiMethod(path="/questions")
-	public List<QuizzSection> listQuestions(@Named("category") @DefaultValue("") String category, @Named("number") @DefaultValue("3") int number) throws UnknownCategoryException{
-		List<QuizzSection> sections = generator.generate(number,category);
+	public List<QuizzSection> listQuestions(@Named("category") @DefaultValue("") String category, @Named("number") @DefaultValue("3") int number, @Named("nbAnswsers") @DefaultValue("3") int nbAnswers) throws UnknownCategoryException, NoResultException{
+		List<QuizzSection> sections = generator.generate(number,category, nbAnswers);
 		
 		/*String pic = "https://commons.wikimedia.org/wiki/Special:FilePath/Alan_Turing_Aged_16.jpg?with=300";
 		List<String> whoAns = new ArrayList<String>();

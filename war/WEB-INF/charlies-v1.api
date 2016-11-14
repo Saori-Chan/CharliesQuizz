@@ -47,33 +47,6 @@
         "body" : "autoTemplate(backendResponse)"
       }
     },
-    "charlies.charliesEndpoint.listQuestions" : {
-      "path" : "/questions",
-      "httpMethod" : "GET",
-      "authLevel" : "NONE",
-      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
-      "audiences" : [ ],
-      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
-      "rosyMethod" : "charlies.api.CharliesEndpoint.listQuestions",
-      "request" : {
-        "parameters" : {
-          "category" : {
-            "type" : "string",
-            "required" : false,
-            "default" : ""
-          },
-          "number" : {
-            "type" : "int32",
-            "required" : false,
-            "default" : "3"
-          }
-        },
-        "body" : "empty"
-      },
-      "response" : {
-        "body" : "autoTemplate(backendResponse)"
-      }
-    },
     "charlies.charliesEndpoint.insertScore" : {
       "path" : "/addscore",
       "httpMethod" : "POST",
@@ -116,6 +89,38 @@
       "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
       "rosyMethod" : "charlies.api.CharliesEndpoint.listCategories",
       "request" : {
+        "body" : "empty"
+      },
+      "response" : {
+        "body" : "autoTemplate(backendResponse)"
+      }
+    },
+    "charlies.charliesEndpoint.listQuestions" : {
+      "path" : "/questions",
+      "httpMethod" : "GET",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "charlies.api.CharliesEndpoint.listQuestions",
+      "request" : {
+        "parameters" : {
+          "category" : {
+            "type" : "string",
+            "required" : false,
+            "default" : ""
+          },
+          "number" : {
+            "type" : "int32",
+            "required" : false,
+            "default" : "3"
+          },
+          "nbAnswsers" : {
+            "type" : "int32",
+            "required" : false,
+            "default" : "3"
+          }
+        },
         "body" : "empty"
       },
       "response" : {
@@ -173,6 +178,18 @@
           }
         }
       },
+      "StringCollection" : {
+        "id" : "StringCollection",
+        "type" : "object",
+        "properties" : {
+          "items" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            }
+          }
+        }
+      },
       "QuizzSection" : {
         "id" : "QuizzSection",
         "type" : "object",
@@ -217,18 +234,6 @@
             }
           }
         }
-      },
-      "StringCollection" : {
-        "id" : "StringCollection",
-        "type" : "object",
-        "properties" : {
-          "items" : {
-            "type" : "array",
-            "items" : {
-              "type" : "string"
-            }
-          }
-        }
       }
     },
     "methods" : {
@@ -237,16 +242,16 @@
           "$ref" : "ScoreCollection"
         }
       },
-      "charlies.api.CharliesEndpoint.listQuestions" : {
-        "response" : {
-          "$ref" : "QuizzSectionCollection"
-        }
-      },
       "charlies.api.CharliesEndpoint.insertScore" : {
       },
       "charlies.api.CharliesEndpoint.listCategories" : {
         "response" : {
           "$ref" : "StringCollection"
+        }
+      },
+      "charlies.api.CharliesEndpoint.listQuestions" : {
+        "response" : {
+          "$ref" : "QuizzSectionCollection"
         }
       },
       "charlies.api.CharliesEndpoint.load" : {

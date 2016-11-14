@@ -3,7 +3,7 @@ package charlies.generators;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.NoResultException;
+import charlies.exceptions.NoResultException;
 
 import charlies.sections.QuizzSection;
 import charlies.sections.QuizzSectionEvent;
@@ -12,13 +12,13 @@ import com.hp.hpl.jena.query.QuerySolution;
 
 public class BattlesGenerator extends SectionGenerator {
 	
-	public BattlesGenerator() {
-		super();
-		request += "select ?pic ?nameBattle ?date ?c ?com ?p" +
+	public BattlesGenerator(int nbAnswers) {
+		super(nbAnswers);
+		request += "select ?pic (STR(?n) AS ?nameBattle) ?date (STR(?c) AS ?coun) (STR(?com) AS ?comm)  ?p" +
 				   "where {" +
 				   "?p a dbo:MilitaryConflict;" +
 				   "   dbo:thumbnail ?pic;" +
-				   "   dbp:conflict ?nameBattle;" +
+				   "   dbp:conflict ?n;" +
 				   "   dbo:date ?date;" +
 				   "   dbp:place ?country;" +
 				   "   dbo:commander ?commandant." +
@@ -34,7 +34,7 @@ public class BattlesGenerator extends SectionGenerator {
 				   "}";
 	}
 
-	public List<QuizzSection> generate(int nb) {
+	public List<QuizzSection> generate(int nb) throws NoResultException {
 		List<QuizzSection> list = new ArrayList<QuizzSection>();
 		List<QuerySolution> solutions = executeRequest();
 		if (solutions.size() < 1) {
@@ -61,14 +61,14 @@ public class BattlesGenerator extends SectionGenerator {
 			sol = solutions.get(r);
 			sol1 = solutions.get(r1);
 			sol2 = solutions.get(r2);
-			answersWho.add(sol.getLiteral("com").toString());
-			answersWho.add(sol1.getLiteral("com").toString());
-			answersWho.add(sol2.getLiteral("com").toString());
+			answersWho.add(sol.getLiteral("comm").toString());
+			answersWho.add(sol1.getLiteral("comm").toString());
+			answersWho.add(sol2.getLiteral("comm").toString());
 			answersWhen.add(sol.getLiteral("date").toString());
 			answersWhen.add(sol1.getLiteral("date").toString());
 			answersWhen.add(sol2.getLiteral("date").toString());
 			
-			String location = super.fixLocation(sol.getLiteral("c").toString());
+			String location = super.fixLocation(sol.getLiteral("coun").toString());
 			answersWhere.add(location);
 			list.add(new QuizzSectionEvent(sol.getResource("pic").toString(), answersWho, answersWhen, answersWhere));
 		}

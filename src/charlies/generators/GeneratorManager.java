@@ -3,6 +3,7 @@ package charlies.generators;
 import java.util.ArrayList;
 import java.util.List;
 
+import charlies.exceptions.NoResultException;
 import charlies.exceptions.UnknownCategoryException;
 import charlies.sections.QuizzSection;
 
@@ -18,16 +19,16 @@ public class GeneratorManager {
 		this.categories.add("athletes");
 	}
 
-	public List<QuizzSection> generate(int nb, String category) throws UnknownCategoryException{
+	public List<QuizzSection> generate(int nb, String category, int nbAnswers) throws UnknownCategoryException, NoResultException{
 		switch (category){
 			case "scientists" :
-				generator = new ScientistsGenerator();
+				generator = new ScientistsGenerator(nbAnswers);
 				break;
 			case "battles" :
-				generator = new BattlesGenerator();
+				generator = new BattlesGenerator(nbAnswers);
 				break;
 			case "athletes" :
-				generator = new AthletesGenerator();
+				generator = new AthletesGenerator(nbAnswers);
 				break;
 			default :
 		  		throw new UnknownCategoryException();

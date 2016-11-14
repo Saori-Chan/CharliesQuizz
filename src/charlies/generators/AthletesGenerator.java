@@ -3,7 +3,7 @@ package charlies.generators;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.NoResultException;
+import charlies.exceptions.NoResultException;
 
 import com.hp.hpl.jena.query.QuerySolution;
 
@@ -12,24 +12,24 @@ import charlies.sections.QuizzSectionPerson;
 
 public class AthletesGenerator extends SectionGenerator {
 
-	public AthletesGenerator(){
-		super();
-		this.request += "select DISTINCT ?name ?date ?c ?pic ?p" +
+	public AthletesGenerator(int nbAnswers){
+		super(nbAnswers);
+		this.request += "select DISTINCT (STR(?n) AS ?name) ?date (STR(?nat) AS ?c) ?pic ?p" +
 						"where {" +
 						"{" + 
 						"   ?p a dbo:Athlete;" +
-						"  	   dbp:name ?name;" +
+						"  	   dbp:name ?n;" +
 						"	   dbp:birthDate ?date;" +
 						"	   dbp:birthPlace ?country;" +
 						" 	   dbo:thumbnail ?pic." +
 						"   ?x dbp:gold ?p." +
 						"   ?country a dbo:Country;" +
-						"            dbp:commonName ?c." +
+						"            dbp:commonName ?nat." +
 						"   FILTER NOT EXISTS {" +
 						"      ?p a dbo:Athlete;" +
-						"         dbp:name ?name." +
+						"         dbp:name ?n." +
 						"      ?x dbp:gold ?p." +
-						"      FILTER regex(?name,',')" +
+						"      FILTER regex(?n,',')" +
 						"	}" +
 						"}" +
 						"FILTER NOT EXISTS {" +
@@ -41,7 +41,7 @@ public class AthletesGenerator extends SectionGenerator {
 						"}"; 		
 	}
 	
-	public List<QuizzSection> generate(int nb) {
+	public List<QuizzSection> generate(int nb) throws NoResultException {
 		List<QuizzSection> list = new ArrayList<QuizzSection>();
 		List<QuerySolution> solutions = executeRequest();
 		if (solutions.size() < 1) {

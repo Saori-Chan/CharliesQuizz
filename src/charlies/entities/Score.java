@@ -1,5 +1,7 @@
 package charlies.entities;
 
+import com.google.appengine.api.datastore.Entity;
+
 public class Score {
 
 	private String id;
