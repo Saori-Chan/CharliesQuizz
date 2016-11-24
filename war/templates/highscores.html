@@ -27,28 +27,28 @@
 							</thead>
 							<tbody>
 								<tr ng-repeat="highscore in highscores.scores" class="ng-class: {
-									'green lighten-3': highscores.score_player[0].place == $index+1
+									'green lighten-3': highscores.place == $index+1
 								}">
 									<td>{{$index+1}}</td>
-									<td><img src="{{highscore.pic}}"> {{highscore.name}}</td>
+									<td><img ng-src="highscore.pic">{{highscore.name}}</td>
 									<td>{{highscore.score}}</td>
 									<td ng-show="highscoreCategory">{{highscore.category}}</td>
 								</tr>
-								<tr ng-show="highscores.score_player[0].place > 10">
+								<tr ng-show="highscores.place > 10">
 									<td>...</td>
 									<td>...</td>
 									<td>...</td>
 									<td ng-show="highscoreCategory">{{highscore.category}}</td>
 								</tr>
-								<tr ng-repeat="highscore in highscores.score_player" class="green lighten-3" ng-show="highscores.score_player[0].place > 10">
-									<td>{{highscore.place}}</td>
-									<td>{{highscore.name}}</td>
-									<td>{{highscore.score}}</td>
-									<td ng-show="highscoreCategory">{{highscore.category}}</td>
+								<tr class="green lighten-3" ng-show="highscores.place > 10">
+									<td>{{highscores.place}}</td>
+									<td><img ng-src="highscore.pic">{{highscore.name}}</td>
+									<td>{{highscores.scorePlayer.score}}</td>
+									<td ng-show="highscoreCategory">{{highscores.scorePlayer.category}}</td>
 								</tr>
 							</tbody>
 						</table>
-					</div
+					</div>
 				</div>
 				<div ng-show="loading">
 					<br/><br/>

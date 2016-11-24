@@ -16,6 +16,7 @@
 	<classpathentry kind="lib" path="/home/antoine/Documents/Fac/M1/apache-jena-2.10.0/lib/slf4j-log4j12-1.6.4.jar"/>
 	<classpathentry kind="lib" path="/home/antoine/Documents/Fac/M1/apache-jena-2.10.0/lib/xercesImpl-2.10.0.jar"/>
 	<classpathentry kind="lib" path="/home/antoine/Documents/Fac/M1/apache-jena-2.10.0/lib/xml-apis-1.4.01.jar"/>
-	<classpathentry kind="lib" path="/home/antoine/Documents/Fac/M1/google-cloud-datastore-0.5.0.jar"/>
+	<classpathentry kind="lib" path="/home/antoine/Documents/Fac/M1/google-cloud-0.6.0.jar"/>
+	<classpathentry kind="lib" path="/home/antoine/Documents/Fac/M1/google-cloud-datastore-0.6.0.jar"/>
 	<classpathentry kind="output" path="war/WEB-INF/classes"/>
 </classpath>

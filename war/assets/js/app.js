@@ -318,13 +318,13 @@ app.controller('GameController', ['$rootScope', '$scope', '$routeParams', '$loca
 
 app.controller('EndGameController', ['$rootScope', '$scope', '$location',
     function($rootScope, $scope, $location) {
-
-        // Redirect if refreshed
-        if (!$rootScope.currentGame) {
-            $location.path('/');
-            return;
-        }
-
+	
+	// Redirect if refreshed
+    if (!$rootScope.currentGame) {
+        $location.path('/');
+        return;
+    }
+    
     }
 ]);
 
@@ -352,7 +352,7 @@ app.controller('HighscoresController', ['$scope', '$location', 'GApi',
 
             if (category == "all") {
                 $scope.highscoreCategory = true;
-                GApi.execute('charlies', 'charliesEndpoint.listHighscores').then( function(resp) {
+                GApi.execute('charlies', 'charliesEndpoint.getHighscores').then( function(resp) {
         			$scope.highscores = resp.items;
                     $scope.loading = false;
         		}, function() {

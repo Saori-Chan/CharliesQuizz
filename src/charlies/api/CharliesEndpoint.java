@@ -3,6 +3,8 @@ package charlies.api;
 import java.util.ArrayList;
 import java.util.List;
 
+import charlies.datastore.DatastoreManager;
+import charlies.entities.Highscores;
 import charlies.entities.Score;
 import charlies.exceptions.NoResultException;
 import charlies.exceptions.UnknownCategoryException;
@@ -19,27 +21,33 @@ public class CharliesEndpoint {
 
 	private List<Score> highscores;
 	private GeneratorManager generator = new GeneratorManager();
+	private DatastoreManager manager = new DatastoreManager();
 	
 	@ApiMethod(path="/highscores")
-	public List<Score> listHighscores(@Named("category") @DefaultValue("") String category) {
-		this.highscores = load();
-		if (category.equals("")){
-			return highscores;
-		}
-		List<Score> hs = new ArrayList<Score>();
-		for (Score s : highscores){
-			if (category.equals(s.getCategory())){
-				hs.add(s);
-			}
-		}
-		return hs;
-	}
-	
-	public List<Score> load(){
-		//TODO use a "loadFromDatastore" function/request.
-		List<Score> hs = new ArrayList<Score>();
-
-		return hs;
+	public Highscores getHighscores(@Named("category") @DefaultValue("") String category) {
+		
+		//this.highscores = load();
+		List<Score> highscores = new ArrayList<Score>();
+		
+		
+		/*if (category.equals("")){
+			hs = manager.listHighscores();
+		} else {
+			hs = manager.listHighscores(category);
+		}*/
+		String pic = "https://lh3.googleusercontent.com/-XdUIqdMkCWA/AAAAAAAAAAI/AAAAAAAAAAA/4252rscbv5M/photo.jpg";
+		highscores.add(new Score("scientists", "carat", pic, 4200));
+		highscores.add(new Score("scientists", "carat1", pic, 4200));
+		highscores.add(new Score("battles", "carat2", pic, 4200));
+		highscores.add(new Score("battles", "carat3", pic, 4200));
+		highscores.add(new Score("athletes", "carat4", pic, 4200));
+		highscores.add(new Score("athletes", "carat5", pic, 4200));
+		
+		Score scorePlayer = new Score("athletes", "carat5", pic, 42);
+		
+		Highscores scores = new Highscores(highscores,14,scorePlayer);
+		
+		return scores;
 	}
 		
 	@ApiMethod(path="/questions")
@@ -67,8 +75,7 @@ public class CharliesEndpoint {
 	@ApiMethod(path="/addscore")
 	public void insertScore(@Named("category") String category, @Named("pic") String pic, @Named("name") String name, @Named("score") int score){
 		Score s = new Score(category, pic, name, score);
-		this.highscores.add(s);
-		//TODO use a "storeInDataStore" function
+		manager.insertScore(s);
 	}
 	
 	@ApiMethod(path="/categories")
