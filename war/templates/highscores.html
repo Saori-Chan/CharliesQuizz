@@ -6,15 +6,16 @@
         	<div class="card-content">
 
 				<div class="row">
-				  	<div class="col s12">
+					<div class="col s12">
 						<ul class="tabs">
-						  	<li class="tab col s3 ng-class:
-								{
-									'grey lighten-3': category === 'all'
-								}
-							" ng-repeat="category in categories"><a href="" ng-click="loadHighscores($index)">{{category}}</a></li>
+							<li class="tab col s3 grey lighten-3">
+								<a href="" class="active" ng-click="loadHighscores('all')">All</a>
+							</li>
+							<li class="tab col s3" ng-repeat="category in categories">
+								<a href="" ng-click="loadHighscores(category)">{{category}}</a>
+							</li>
 						</ul>
-				  	</div>
+					</div>
 					<div>
 						<table class="highlight" ng-show="selectHighscore">
 							<thead>
@@ -26,11 +27,11 @@
 								</tr>
 							</thead>
 							<tbody>
-								<tr ng-repeat="highscore in highscores.scores" class="ng-class: {
+								<tr ng-repeat="highscore in highscores.hs" class="ng-class: {
 									'green lighten-3': highscores.place == $index+1
 								}">
 									<td>{{$index+1}}</td>
-									<td><img ng-src="highscore.pic">{{highscore.name}}</td>
+									<td><img ng-src="{{highscore.pic}}" style="width: 40px; height: 40px;">{{highscore.name}}</td>
 									<td>{{highscore.score}}</td>
 									<td ng-show="highscoreCategory">{{highscore.category}}</td>
 								</tr>
@@ -42,9 +43,9 @@
 								</tr>
 								<tr class="green lighten-3" ng-show="highscores.place > 10">
 									<td>{{highscores.place}}</td>
-									<td><img ng-src="highscore.pic">{{highscore.name}}</td>
-									<td>{{highscores.scorePlayer.score}}</td>
-									<td ng-show="highscoreCategory">{{highscores.scorePlayer.category}}</td>
+									<td><img ng-src="{{highscores.s.pic}}" style="width: 40px; height: 40px;">{{highscores.s.name}}</td>
+									<td>{{highscores.s.score}}</td>
+									<td ng-show="highscoreCategory">{{highscores.s.category}}</td>
 								</tr>
 							</tbody>
 						</table>

@@ -318,13 +318,13 @@ app.controller('GameController', ['$rootScope', '$scope', '$routeParams', '$loca
 
 app.controller('EndGameController', ['$rootScope', '$scope', '$location',
     function($rootScope, $scope, $location) {
-	
+
 	// Redirect if refreshed
     if (!$rootScope.currentGame) {
         $location.path('/');
         return;
     }
-    
+
     }
 ]);
 
@@ -336,7 +336,6 @@ app.controller('HighscoresController', ['$scope', '$location', 'GApi',
 
         GApi.execute('charlies', 'charliesEndpoint.listCategories').then( function(resp) {
             $scope.categories = resp.items;
-            $scope.categories.unshift("all");
             $scope.loading = false;
         }, function() {
             $scope.loading = false;
@@ -345,15 +344,14 @@ app.controller('HighscoresController', ['$scope', '$location', 'GApi',
 
         $('ul.tabs').tabs();
 
-        $scope.loadHighscores = function(category_id) {
-            var category = $scope.categories[category_id];
-
+        $scope.loadHighscores = function(category) {
             $scope.selectHighscore = true;
 
             if (category == "all") {
                 $scope.highscoreCategory = true;
                 GApi.execute('charlies', 'charliesEndpoint.getHighscores').then( function(resp) {
-        			$scope.highscores = resp.items;
+        			$scope.highscores = resp;
+                    console.log(resp);
                     $scope.loading = false;
         		}, function() {
                     $scope.loading = false;
@@ -361,8 +359,8 @@ app.controller('HighscoresController', ['$scope', '$location', 'GApi',
         		});
             }else {
                 $scope.highscoreCategory = false;
-                GApi.execute('charlies', 'charliesEndpoint.listHighscores', {category: category}).then( function(resp) {
-        			$scope.highscores = resp.items;
+                GApi.execute('charlies', 'charliesEndpoint.getHighscores', {category: category}).then( function(resp) {
+        			$scope.highscores = resp;
                     $scope.loading = false;
         		}, function() {
                     $scope.loading = false;
@@ -370,6 +368,8 @@ app.controller('HighscoresController', ['$scope', '$location', 'GApi',
         		});
             }
         };
+
+        $scope.loadHighscores('all');
     }
 ]);
 
