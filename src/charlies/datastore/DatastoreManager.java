@@ -1,10 +1,19 @@
 package charlies.datastore;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import charlies.entities.Score;
 
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
+import com.google.appengine.api.datastore.FetchOptions;
+import com.google.appengine.api.datastore.Query;
+import com.google.appengine.api.datastore.Query.Filter;
+import com.google.appengine.api.datastore.Query.FilterOperator;
+import com.google.appengine.api.datastore.Query.FilterPredicate;
+import com.google.appengine.api.datastore.Query.SortDirection;
 
 public class DatastoreManager {
 
@@ -23,34 +32,59 @@ public class DatastoreManager {
 		datastore.put(e);
 	}
 
-	/*public List<Score> listHighscores() {
+	public List<Score> listHighscores() {
 		List<Score> hs = new ArrayList<Score>();
-		String r = "SELECT * FROM Score";
-		Query<Entity> query = Query.entityQueryBuilder().kind("Score").build();
-		QueryResults<Entity> results = datastore.run(query);
-		while (results.hasNext()) {
-			Entity entity = results.next();
-		    hs.add(new Score(entity.getString("category"),
-		    		entity.getString("name"),
-		    		entity.getString("pic"),
-		    		entity.getLong("score")));
+		Query q = new Query("Score").addSort("score", SortDirection.DESCENDING);;
+		List<Entity> results = datastore.prepare(q).asList(FetchOptions.Builder.withDefaults());
+		
+		int i=0;
+		for (Entity e : results){
+			if (i<10){
+				String category = (String) e.getProperty("category");
+				String name = (String) e.getProperty("name");
+				String pic = (String) e.getProperty("pic");
+				long score = (long) e.getProperty("score");
+				hs.add(new Score(category, name, pic, score));
+				++i;
+			} else {
+				break;
+			}
 		}
+		
 		return hs;
 	}
 
-	public List<Score> listHighscores(String category) {
+	public List<Score> listHighscores(String cat) {
 		List<Score> hs = new ArrayList<Score>();
-		String r = "SELECT * FROM Score";
-		Query<Entity> query = Query.entityQueryBuilder().kind("Score").filter(category).build();
-		QueryResults<Entity> results = datastore.run(query);
-		while (results.hasNext()) {
-			Entity entity = results.next();
-		    hs.add(new Score(entity.getString("category"),
-		    		entity.getString("name"),
-		    		entity.getString("pic"),
-		    		entity.getLong("score")));
+		Filter catFilter = new FilterPredicate("category", FilterOperator.EQUAL, cat);
+		Query q = new Query("Score").setFilter(catFilter).addSort("score", SortDirection.DESCENDING);;
+		List<Entity> results = datastore.prepare(q).asList(FetchOptions.Builder.withDefaults());
+		
+		int i=0;
+		for (Entity e : results){
+			if (i<10){
+				String category = (String) e.getProperty("category");
+				String name = (String) e.getProperty("name");
+				String pic = (String) e.getProperty("pic");
+				long score = (long) e.getProperty("score");
+				hs.add(new Score(category, name, pic, score));
+				++i;
+			} else {
+				break;
+			}
 		}
+		
 		return hs;
-	}*/
+	}
+	
+	/*public int getBetterPlace(String name){
+		return 14;
+	}
+	
+	public Score getBetterScore(String name){
+		return new Score("athletes", "carat5", pic, 42);
+	}
+	
+	*/
 	
 }

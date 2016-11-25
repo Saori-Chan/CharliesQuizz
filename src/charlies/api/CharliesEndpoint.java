@@ -26,24 +26,26 @@ public class CharliesEndpoint {
 	@ApiMethod(path="/highscores")
 	public Highscores getHighscores(@Named("category") @DefaultValue("") String category) {
 		
-		//this.highscores = load();
-		List<Score> highscores = new ArrayList<Score>();
-		
-		
-		/*if (category.equals("")){
-			hs = manager.listHighscores();
-		} else {
-			hs = manager.listHighscores(category);
-		}*/
 		String pic = "https://lh3.googleusercontent.com/-XdUIqdMkCWA/AAAAAAAAAAI/AAAAAAAAAAA/4252rscbv5M/photo.jpg";
-		highscores.add(new Score("scientists", "carat", pic, 4200));
+		
+		List<Score> highscores = new ArrayList<Score>();
+		Score scorePlayer = new Score("athletes", "carat5", pic, 42);
+		int place = 14;
+		
+//		if (category.equals("")){
+			highscores = manager.listHighscores();
+//		} else {
+//			highscores = manager.listHighscores(category);
+//		}
+		/*place = manager.getBetterPlace(name);
+		scorePlayer = manager.getBetterScore(name);
+		*/
+		/*highscores.add(new Score("scientists", "carat", pic, 4200));
 		highscores.add(new Score("scientists", "carat1", pic, 4200));
 		highscores.add(new Score("battles", "carat2", pic, 4200));
 		highscores.add(new Score("battles", "carat3", pic, 4200));
 		highscores.add(new Score("athletes", "carat4", pic, 4200));
-		highscores.add(new Score("athletes", "carat5", pic, 4200));
-		
-		Score scorePlayer = new Score("athletes", "carat5", pic, 42);
+		highscores.add(new Score("athletes", "carat5", pic, 4200));*/
 		
 		Highscores scores = new Highscores(highscores,14,scorePlayer);
 		

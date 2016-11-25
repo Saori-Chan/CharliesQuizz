@@ -25,21 +25,6 @@
     "maxAge" : 0
   },
   "methods" : {
-    "charlies.charliesEndpoint.listCategories" : {
-      "path" : "/categories",
-      "httpMethod" : "GET",
-      "authLevel" : "NONE",
-      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
-      "audiences" : [ ],
-      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
-      "rosyMethod" : "charlies.api.CharliesEndpoint.listCategories",
-      "request" : {
-        "body" : "empty"
-      },
-      "response" : {
-        "body" : "autoTemplate(backendResponse)"
-      }
-    },
     "charlies.charliesEndpoint.listQuestions" : {
       "path" : "/questions",
       "httpMethod" : "GET",
@@ -64,28 +49,6 @@
             "type" : "int32",
             "required" : false,
             "default" : "3"
-          }
-        },
-        "body" : "empty"
-      },
-      "response" : {
-        "body" : "autoTemplate(backendResponse)"
-      }
-    },
-    "charlies.charliesEndpoint.getHighscores" : {
-      "path" : "/highscores",
-      "httpMethod" : "GET",
-      "authLevel" : "NONE",
-      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
-      "audiences" : [ ],
-      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
-      "rosyMethod" : "charlies.api.CharliesEndpoint.getHighscores",
-      "request" : {
-        "parameters" : {
-          "category" : {
-            "type" : "string",
-            "required" : false,
-            "default" : ""
           }
         },
         "body" : "empty"
@@ -126,22 +89,47 @@
       "response" : {
         "body" : "empty"
       }
+    },
+    "charlies.charliesEndpoint.listCategories" : {
+      "path" : "/categories",
+      "httpMethod" : "GET",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "charlies.api.CharliesEndpoint.listCategories",
+      "request" : {
+        "body" : "empty"
+      },
+      "response" : {
+        "body" : "autoTemplate(backendResponse)"
+      }
+    },
+    "charlies.charliesEndpoint.getHighscores" : {
+      "path" : "/highscores",
+      "httpMethod" : "GET",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "charlies.api.CharliesEndpoint.getHighscores",
+      "request" : {
+        "parameters" : {
+          "category" : {
+            "type" : "string",
+            "required" : false,
+            "default" : ""
+          }
+        },
+        "body" : "empty"
+      },
+      "response" : {
+        "body" : "autoTemplate(backendResponse)"
+      }
     }
   },
   "descriptor" : {
     "schemas" : {
-      "StringCollection" : {
-        "id" : "StringCollection",
-        "type" : "object",
-        "properties" : {
-          "items" : {
-            "type" : "array",
-            "items" : {
-              "type" : "string"
-            }
-          }
-        }
-      },
       "QuizzSection" : {
         "id" : "QuizzSection",
         "type" : "object",
@@ -187,6 +175,18 @@
           }
         }
       },
+      "StringCollection" : {
+        "id" : "StringCollection",
+        "type" : "object",
+        "properties" : {
+          "items" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            }
+          }
+        }
+      },
       "Highscores" : {
         "id" : "Highscores",
         "type" : "object",
@@ -219,28 +219,29 @@
             "type" : "string"
           },
           "score" : {
-            "type" : "integer"
+            "type" : "string",
+            "format" : "int64"
           }
         }
       }
     },
     "methods" : {
-      "charlies.api.CharliesEndpoint.listCategories" : {
-        "response" : {
-          "$ref" : "StringCollection"
-        }
-      },
       "charlies.api.CharliesEndpoint.listQuestions" : {
         "response" : {
           "$ref" : "QuizzSectionCollection"
+        }
+      },
+      "charlies.api.CharliesEndpoint.insertScore" : {
+      },
+      "charlies.api.CharliesEndpoint.listCategories" : {
+        "response" : {
+          "$ref" : "StringCollection"
         }
       },
       "charlies.api.CharliesEndpoint.getHighscores" : {
         "response" : {
           "$ref" : "Highscores"
         }
-      },
-      "charlies.api.CharliesEndpoint.insertScore" : {
       }
     }
   }

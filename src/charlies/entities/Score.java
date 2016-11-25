@@ -6,9 +6,9 @@ public class Score {
 	private String category;
 	private String pic;
 	private String name;
-	private int score;
+	private long score;
 	
-	public Score(String category, String name, String pic, int score) {
+	public Score(String category, String name, String pic, long score) {
 		
 		this.category = category;
 		this.pic = pic;
@@ -32,11 +32,11 @@ public class Score {
 		this.name = name;
 	}
 
-	public int getScore() {
+	public long getScore() {
 		return score;
 	}
 
-	public void setScore(int score) {
+	public void setScore(long score) {
 		this.score = score;
 	}
 
