@@ -316,16 +316,23 @@ app.controller('GameController', ['$rootScope', '$scope', '$routeParams', '$loca
 
 /* EndGameController */
 
-app.controller('EndGameController', ['$rootScope', '$scope', '$location',
-    function($rootScope, $scope, $location) {
+app.controller('EndGameController', ['$rootScope', '$scope', '$location', 'GApi',
+    function($rootScope, $scope, $location, GApi) {
 
-	// Redirect if refreshed
-    if (!$rootScope.currentGame) {
-        $location.path('/');
-        return;
-    }
+        GApi.execute('charlies', 'charliesEndpoint.insertScore', {category: $rootScope.currentGame.category, name: $rootScope.google_user.name, pic: $rootScope.google_user.picture, score: $rootScope.currentGame.score}).then( function(resp) {
+            $scope.loading = false;
+        }, function() {
+            $scope.loading = false;
+            console.log("error :(");
+        });
 
-    }
+    	// Redirect if refreshed
+        if (!$rootScope.currentGame) {
+            $location.path('/');
+            return;
+        }
+
+        }
 ]);
 
 /* HighscoresController */
@@ -351,7 +358,6 @@ app.controller('HighscoresController', ['$scope', '$location', 'GApi',
                 $scope.highscoreCategory = true;
                 GApi.execute('charlies', 'charliesEndpoint.getHighscores').then( function(resp) {
         			$scope.highscores = resp;
-                    console.log(resp);
                     $scope.loading = false;
         		}, function() {
                     $scope.loading = false;
