@@ -19,37 +19,26 @@ import com.google.api.server.spi.config.Named;
 @Api(name = "charlies", version="v1")
 public class CharliesEndpoint {
 
-	private List<Score> highscores;
 	private GeneratorManager generator = new GeneratorManager();
 	private DatastoreManager manager = new DatastoreManager();
 	
 	@ApiMethod(path="/highscores")
 	public Highscores getHighscores(@Named("category") @DefaultValue("") String category) {
 		
-		String pic = "https://lh3.googleusercontent.com/-XdUIqdMkCWA/AAAAAAAAAAI/AAAAAAAAAAA/4252rscbv5M/photo.jpg";
-		
 		List<Score> highscores = new ArrayList<Score>();
-		Score scorePlayer = new Score("athletes", "carat5", pic, 42);
-		int place = 14;
+		Score scorePlayer;
+		int place;
 		
-//		if (category.equals("")){
+		if (category.equals("")){
 			highscores = manager.listHighscores();
-//		} else {
-//			highscores = manager.listHighscores(category);
-//		}
-		/*place = manager.getBetterPlace(name);
-		scorePlayer = manager.getBetterScore(name);
-		*/
-		/*highscores.add(new Score("scientists", "carat", pic, 4200));
-		highscores.add(new Score("scientists", "carat1", pic, 4200));
-		highscores.add(new Score("battles", "carat2", pic, 4200));
-		highscores.add(new Score("battles", "carat3", pic, 4200));
-		highscores.add(new Score("athletes", "carat4", pic, 4200));
-		highscores.add(new Score("athletes", "carat5", pic, 4200));*/
+			place = manager.getBetterPlace("Antoine CARAT");
+		} else {
+			highscores = manager.listHighscores(category);
+			place = manager.getBetterPlace("Antoine CARAT", category);
+		}
+		scorePlayer = manager.getBetterScore("Antoine CARAT");
 		
-		Highscores scores = new Highscores(highscores,14,scorePlayer);
-		
-		return scores;
+		return new Highscores(highscores,place,scorePlayer);
 	}
 		
 	@ApiMethod(path="/questions")
@@ -76,7 +65,7 @@ public class CharliesEndpoint {
 	
 	@ApiMethod(path="/addscore")
 	public void insertScore(@Named("category") String category, @Named("pic") String pic, @Named("name") String name, @Named("score") int score){
-		Score s = new Score(category, pic, name, score);
+		Score s = new Score(category, name, pic, score);
 		manager.insertScore(s);
 	}
 	
