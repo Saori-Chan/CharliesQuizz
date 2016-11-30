@@ -14,8 +14,8 @@ public class BattlesGenerator extends SectionGenerator {
 	
 	public BattlesGenerator(int nbAnswers) {
 		super(nbAnswers);
-		request += "select ?pic (STR(?n) AS ?nameBattle) ?date (STR(?c) AS ?coun) (STR(?com) AS ?comm)  ?p" +
-				   "where {" +
+		request += "SELECT ?pic (STR(?n) AS ?nameBattle) ?date (STR(?c) AS ?coun) (STR(?com) AS ?comm)  ?p" +
+				   "WHERE {" +
 				   "?p a dbo:MilitaryConflict;" +
 				   "   dbo:thumbnail ?pic;" +
 				   "   dbp:conflict ?n;" +

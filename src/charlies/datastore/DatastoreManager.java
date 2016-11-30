@@ -3,7 +3,11 @@ package charlies.datastore;
 import java.util.ArrayList;
 import java.util.List;
 
+import charlies.entities.Athlete;
+import charlies.entities.Battle;
+import charlies.entities.Scientist;
 import charlies.entities.Score;
+import charlies.generators.SparqlService;
 
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
@@ -19,9 +23,11 @@ import com.google.appengine.api.datastore.Query.SortDirection;
 public class DatastoreManager {
 
 	DatastoreService datastore;
+	SparqlService sparql;
 	
 	public DatastoreManager(){
-		 datastore = DatastoreServiceFactory.getDatastoreService();;
+		 datastore = DatastoreServiceFactory.getDatastoreService();
+		 sparql = new SparqlService();
 	}
 	
 	public void insertScore(Score s){
@@ -38,18 +44,12 @@ public class DatastoreManager {
 		Query q = new Query("Score").addSort("score", SortDirection.DESCENDING);;
 		List<Entity> results = datastore.prepare(q).asList(FetchOptions.Builder.withLimit(10));
 		
-		int i=0;
 		for (Entity e : results){
-			if (i<10){
-				String category = (String) e.getProperty("category");
-				String name = (String) e.getProperty("name");
-				String pic = (String) e.getProperty("pic");
-				long score = (long) e.getProperty("score");
-				hs.add(new Score(category, name, pic, score));
-				++i;
-			} else {
-				break;
-			}
+			String category = (String) e.getProperty("category");
+			String name = (String) e.getProperty("name");
+			String pic = (String) e.getProperty("pic");
+			long score = (long) e.getProperty("score");
+			hs.add(new Score(category, name, pic, score));
 		}
 		
 		return hs;
@@ -111,6 +111,41 @@ public class DatastoreManager {
 		
 		return s;
 	}
-	
-	
+
+	public void fillScientists(List<Scientist> scientists) {
+		for (Scientist s : scientists){
+			Entity e = new Entity("Battle");
+			e.setProperty("pic", s.getPic());
+			e.setProperty("name", s.getName());
+			e.setProperty("birth", s.getBirth());
+			e.setProperty("place", s.getPlace());
+			datastore.put(e);			
+		}
+	}
+
+	public void fillBattles(List<Battle> b) {
+		// TODO Auto-generated method stub
+	}
+
+	public void fillAthletes(List<Athlete> a) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public List<Scientist> listScientists() {
+		List<Scientist> scientists = new ArrayList<Scientist>();
+		Query q = new Query("Scientist");
+		List<Entity> results = datastore.prepare(q).asList(FetchOptions.Builder.withDefaults());
+		
+		for (Entity e : results){
+			String pic = (String) e.getProperty("pic");
+			String name = (String) e.getProperty("name");
+			String birth = (String) e.getProperty("birth");
+			String place = (String) e.getProperty("place");
+			scientists.add(new Scientist(pic, name, birth, place));
+		}
+		
+		return scientists;
+	}
+		
 }

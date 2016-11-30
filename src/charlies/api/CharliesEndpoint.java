@@ -4,11 +4,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 import charlies.datastore.DatastoreManager;
+import charlies.entities.Athlete;
+import charlies.entities.Battle;
 import charlies.entities.Highscores;
+import charlies.entities.Scientist;
 import charlies.entities.Score;
 import charlies.exceptions.NoResultException;
 import charlies.exceptions.UnknownCategoryException;
 import charlies.generators.GeneratorManager;
+import charlies.generators.SparqlService;
 import charlies.sections.QuizzSection;
 
 import com.google.api.server.spi.config.Api;
@@ -19,8 +23,9 @@ import com.google.api.server.spi.config.Named;
 @Api(name = "charlies", version="v1")
 public class CharliesEndpoint {
 
-	private GeneratorManager generator = new GeneratorManager();
 	private DatastoreManager manager = new DatastoreManager();
+	private GeneratorManager generator = new GeneratorManager(manager);
+	private SparqlService sparql = new SparqlService();
 	
 	@ApiMethod(path="/highscores")
 	public Highscores getHighscores(@Named("category") @DefaultValue("") String category) {
@@ -43,23 +48,7 @@ public class CharliesEndpoint {
 		
 	@ApiMethod(path="/questions")
 	public List<QuizzSection> listQuestions(@Named("category") @DefaultValue("") String category, @Named("number") @DefaultValue("3") int number, @Named("nbAnswsers") @DefaultValue("3") int nbAnswers) throws UnknownCategoryException, NoResultException{
-		List<QuizzSection> sections = generator.generate(number,category, nbAnswers);
-		
-		/*String pic = "https://commons.wikimedia.org/wiki/Special:FilePath/Alan_Turing_Aged_16.jpg?with=300";
-		List<String> whoAns = new ArrayList<String>();
-		whoAns.add("Alan Turing");
-		whoAns.add("Donald Knuth");
-		whoAns.add("Ron Rivest");
-		
-		List<String> whenAns = new ArrayList<String>();
-		whenAns.add("1912");
-		whenAns.add("1942");
-		whenAns.add("1984");
-		
-		List<String> whereAns = new ArrayList<String>();
-		whereAns.add("United Kingdom");
-		
-		sections.add(new QuizzSectionPerson(pic, whoAns, whenAns, whereAns));*/
+		List<QuizzSection> sections = generator.generate(number,category);
 		return sections;
 	}
 	
@@ -72,6 +61,23 @@ public class CharliesEndpoint {
 	@ApiMethod(path="/categories")
 	public List<String> listCategories(){
 		return generator.getCategories();
+	}
+
+	@ApiMethod(path="/fill")
+	public void insertQuestions(@Named("category") String category, @Named("number") int number) throws UnknownCategoryException{
+		switch(category){
+		case "scientists":
+			List<Scientist> s = generator.generateScientists(sparql.getScientists(number));
+			manager.fillScientists(s);
+		case "battles":
+			List<Battle> b = generator.generateBattles(sparql.getBattles(number));
+			manager.fillBattles(b);
+		case "athletes":
+			List<Athlete> a = generator.generateAthletes(sparql.getAthletes(number));
+			manager.fillAthletes(a);
+		default:
+			throw new UnknownCategoryException();
+		}
 	}
 
 }
