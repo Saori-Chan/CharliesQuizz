@@ -332,7 +332,7 @@ app.controller('EndGameController', ['$rootScope', '$scope', '$location', 'GApi'
             return;
         }
 
-        }
+    }
 ]);
 
 /* HighscoresController */

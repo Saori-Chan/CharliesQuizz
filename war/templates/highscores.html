@@ -21,6 +21,7 @@
 							<thead>
 								<tr>
 									<th data-field="place">#</th>
+									<th data-field="pic"></th>
 									<th data-field="id">Name</th>
 									<th data-field="score">Score</th>
 									<th data-field="category" ng-show="highscoreCategory">Category</th>
@@ -31,19 +32,18 @@
 									'green lighten-3': highscores.place == $index+1
 								}">
 									<td>{{$index+1}}</td>
-									<td><img ng-src="{{highscore.pic}}" style="width: 40px; height: 40px;">{{highscore.name}}</td>
+									<td><img ng-src="{{highscore.pic}}" style="width: 40px; height: 40px;"></td>
+									<td>{{highscore.name}}</td>
 									<td>{{highscore.score}}</td>
 									<td ng-show="highscoreCategory">{{highscore.category}}</td>
 								</tr>
 								<tr ng-show="highscores.place > 10">
-									<td>...</td>
-									<td>...</td>
-									<td>...</td>
-									<td ng-show="highscoreCategory">{{highscore.category}}</td>
+									<td colspan="5" style="text-align: center; font-size: 30px;"><b>...</b></td>
 								</tr>
 								<tr class="green lighten-3" ng-show="highscores.place > 10">
 									<td>{{highscores.place}}</td>
-									<td><img ng-src="{{highscores.s.pic}}" style="width: 40px; height: 40px;">{{highscores.s.name}}</td>
+									<td><img ng-src="{{highscores.s.pic}}" style="width: 40px; height: 40px;"></td>
+									<td>{{highscores.s.name}}</td>
 									<td>{{highscores.s.score}}</td>
 									<td ng-show="highscoreCategory">{{highscores.s.category}}</td>
 								</tr>
