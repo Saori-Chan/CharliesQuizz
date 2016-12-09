@@ -19,7 +19,7 @@ public class ScientistsGenerator extends SectionGenerator {
 				
 		List<QuizzSection> list = new ArrayList<QuizzSection>();
 		
-		String pic;
+		//String pic;
 		List<String> answersWho;
 		List<String> answersWhen;
 		List<String> answersWhere;
@@ -48,39 +48,10 @@ public class ScientistsGenerator extends SectionGenerator {
 			answersWhen.add(s.getBirth());
 			answersWhen.add(s1.getBirth());
 			answersWhen.add(s2.getBirth());
-
+			answersWhere.add(s.getPlace());
+			
 			list.add(new QuizzSectionPerson(s.getPic(), answersWho, answersWhen, answersWhere));
 		}
-		
-		/*for (int i=0; i<nb; ++i){
-			answersWho = new ArrayList<String>();
-			answersWhen = new ArrayList<String>();
-			answersWhere = new ArrayList<String>();
-			
-			//Good answer
-			int r = (int)(Math.random() * solutions.size());
-			QuerySolution sol = solutions.get(r);
-			answersWho.add(sol.getLiteral("name").toString());
-			answersWhen.add(sol.getLiteral("birth").toString());
-			String location = super.fixLocation(sol.getLiteral("nat").toString());
-			answersWhere.add(location);
-			String pic = sol.getResource("pic").toString();
-			
-			//Bad answers
-			List<Integer> picked = new ArrayList<Integer>();
-			picked.add(r);
-			for (int j=0; j<nbAnswers-1; ++j){
-				int badR = (int)(Math.random() * solutions.size());
-				while (picked.contains(badR)){
-					badR = (int)(Math.random() * solutions.size());
-				}
-				QuerySolution badSol = solutions.get(badR);
-				answersWho.add(badSol.getLiteral("name").toString());
-				answersWhen.add(badSol.getLiteral("birth").toString());
-			}
-			
-			list.add(new QuizzSectionPerson(pic , answersWho, answersWhen, answersWhere));
-		}*/
 		
 		return list;
 	}

@@ -3,6 +3,8 @@ package charlies.generators;
 import java.util.ArrayList;
 import java.util.List;
 
+import charlies.exceptions.NoResultException;
+
 import com.hp.hpl.jena.query.Query;
 import com.hp.hpl.jena.query.QueryExecution;
 import com.hp.hpl.jena.query.QueryExecutionFactory;
@@ -14,7 +16,7 @@ public class SparqlService {
 	
 	private String request;
 
-	public List<QuerySolution> getScientists(int number) {
+	public List<QuerySolution> getScientists(int number) throws NoResultException {
 		this.request = "PREFIX dbr: <http://dbpedia.org/resource/>" +
 					   "PREFIX dbp: <http://dbpedia.org/property/>" +
 					   "PREFIX dbo: <http://dbpedia.org/ontology/>" +
@@ -43,6 +45,9 @@ public class SparqlService {
 		Query query = QueryFactory.create(request.toString());
 		QueryExecution qexec = QueryExecutionFactory.sparqlService("http://dbpedia.org/sparql", query);
 		ResultSet results = qexec.execSelect();
+		if (!results.hasNext()){
+			throw new NoResultException();
+		}
 		while (results.hasNext()){
 			solutions.add(results.next());
 		}
@@ -50,7 +55,7 @@ public class SparqlService {
 		return solutions;
 	}
 	
-	public List<QuerySolution> getBattles(int number) {
+	public List<QuerySolution> getBattles(int number) throws NoResultException {
 		this.request = "PREFIX dbr: <http://dbpedia.org/resource/>" +
 					   "PREFIX dbp: <http://dbpedia.org/property/>" +
 					   "PREFIX dbo: <http://dbpedia.org/ontology/>" +
@@ -79,6 +84,9 @@ public class SparqlService {
 	Query query = QueryFactory.create(request.toString());
 	QueryExecution qexec = QueryExecutionFactory.sparqlService("http://dbpedia.org/sparql", query);
 	ResultSet results = qexec.execSelect();
+	if (!results.hasNext()){
+		throw new NoResultException();
+	}
 	while (results.hasNext()){
 		solutions.add(results.next());
 	}
@@ -86,9 +94,50 @@ public class SparqlService {
 	return solutions;
 	}
 	
-	public List<QuerySolution> getAthletes(int number) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<QuerySolution> getAthletes(int number) throws NoResultException {
+		this.request =  "PREFIX dbr: <http://dbpedia.org/resource/>" +
+						"PREFIX dbp: <http://dbpedia.org/property/>" +
+						"PREFIX dbo: <http://dbpedia.org/ontology/>" +
+						"PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>" +
+						"PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>" +
+				   		"SELECT DISTINCT (STR(?n) AS ?name) ?date (STR(?nat) AS ?c) ?pic ?p" +
+					    "WHERE {" +
+						"{" + 
+						"   ?p a dbo:Athlete;" +
+						"  	   dbp:name ?n;" +
+						"	   dbp:birthDate ?date;" +
+						"	   dbp:birthPlace ?country;" +
+						" 	   dbo:thumbnail ?pic." +
+						"   ?x dbp:gold ?p." +
+						"   ?country a dbo:Country;" +
+						"            dbp:commonName ?nat." +
+						"   FILTER NOT EXISTS {" +
+						"      ?p a dbo:Athlete;" +
+						"         dbp:name ?n." +
+						"      ?x dbp:gold ?p." +
+						"      FILTER regex(?n,',')" +
+						"	}" +
+						"}" +
+						"FILTER NOT EXISTS {" +
+						"   ?p a dbo:Athlete;" +
+						"      dbp:birthDate ?date." +
+						"   ?x dbp:gold ?p." +
+						"   FILTER regex(?date,'--')" +
+						"}" +
+						"}";
+		
+		List<QuerySolution> solutions = new ArrayList<QuerySolution>();
+		Query query = QueryFactory.create(request.toString());
+		QueryExecution qexec = QueryExecutionFactory.sparqlService("http://dbpedia.org/sparql", query);
+		ResultSet results = qexec.execSelect();
+		if (!results.hasNext()){
+			throw new NoResultException();
+		}
+		while (results.hasNext()){
+			solutions.add(results.next());
+		}
+		qexec.close();
+		return solutions;
 	}
 
 }

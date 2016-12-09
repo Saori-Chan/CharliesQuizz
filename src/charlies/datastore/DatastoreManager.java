@@ -114,7 +114,7 @@ public class DatastoreManager {
 
 	public void fillScientists(List<Scientist> scientists) {
 		for (Scientist s : scientists){
-			Entity e = new Entity("Battle");
+			Entity e = new Entity("Scientist");
 			e.setProperty("pic", s.getPic());
 			e.setProperty("name", s.getName());
 			e.setProperty("birth", s.getBirth());
@@ -123,13 +123,26 @@ public class DatastoreManager {
 		}
 	}
 
-	public void fillBattles(List<Battle> b) {
-		// TODO Auto-generated method stub
+	public void fillBattles(List<Battle> battles) {
+		for (Battle b : battles){
+			Entity e = new Entity("Battle");
+			e.setProperty("pic", b.getPic());
+			e.setProperty("commanders", b.getCommanders());
+			e.setProperty("dates", b.getDates());
+			e.setProperty("place", b.getPlace());
+			datastore.put(e);			
+		}
 	}
 
-	public void fillAthletes(List<Athlete> a) {
-		// TODO Auto-generated method stub
-		
+	public void fillAthletes(List<Athlete> athletes) {
+		for (Athlete a : athletes){
+			Entity e = new Entity("Athlete");
+			e.setProperty("pic", a.getPic());
+			e.setProperty("name", a.getName());
+			e.setProperty("birth", a.getBirth());
+			e.setProperty("place", a.getPlace());
+			datastore.put(e);			
+		}
 	}
 
 	public List<Scientist> listScientists() {
@@ -146,6 +159,38 @@ public class DatastoreManager {
 		}
 		
 		return scientists;
+	}
+
+	public List<Battle> listBattles() {
+		List<Battle> battles = new ArrayList<Battle>();
+		Query q = new Query("Battle");
+		List<Entity> results = datastore.prepare(q).asList(FetchOptions.Builder.withDefaults());
+		
+		for (Entity e : results){
+			String pic = (String) e.getProperty("pic");
+			String name = (String) e.getProperty("commanders");
+			String birth = (String) e.getProperty("dates");
+			String place = (String) e.getProperty("place");
+			battles.add(new Battle(pic, name, birth, place));
+		}
+		
+		return battles;
+	}
+	
+	public List<Athlete> listAthletes() {
+		List<Athlete> athletes = new ArrayList<Athlete>();
+		Query q = new Query("Athlete");
+		List<Entity> results = datastore.prepare(q).asList(FetchOptions.Builder.withDefaults());
+		
+		for (Entity e : results){
+			String pic = (String) e.getProperty("pic");
+			String name = (String) e.getProperty("name");
+			String birth = (String) e.getProperty("birth");
+			String place = (String) e.getProperty("place");
+			athletes.add(new Athlete(pic, name, birth, place));
+		}
+		
+		return athletes;
 	}
 		
 }

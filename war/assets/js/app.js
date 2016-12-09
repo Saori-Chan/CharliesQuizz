@@ -337,8 +337,8 @@ app.controller('EndGameController', ['$rootScope', '$scope', '$location', 'GApi'
 
 /* HighscoresController */
 
-app.controller('HighscoresController', ['$scope', '$location', 'GApi',
-    function($scope, $location, GApi) {
+app.controller('HighscoresController', ['$rootScope', '$scope', '$location', 'GApi',
+    function($rootScope, $scope, $location, GApi) {
         $scope.loading = true;
 
         GApi.execute('charlies', 'charliesEndpoint.listCategories').then( function(resp) {
@@ -353,10 +353,10 @@ app.controller('HighscoresController', ['$scope', '$location', 'GApi',
 
         $scope.loadHighscores = function(category) {
             $scope.selectHighscore = true;
-
+            
             if (category == "all") {
                 $scope.highscoreCategory = true;
-                GApi.execute('charlies', 'charliesEndpoint.getHighscores').then( function(resp) {
+                GApi.execute('charlies', 'charliesEndpoint.getHighscores', {player: $rootScope.google_user.name}).then( function(resp) {
         			$scope.highscores = resp;
                     $scope.loading = false;
         		}, function() {
@@ -365,7 +365,7 @@ app.controller('HighscoresController', ['$scope', '$location', 'GApi',
         		});
             }else {
                 $scope.highscoreCategory = false;
-                GApi.execute('charlies', 'charliesEndpoint.getHighscores', {category: category}).then( function(resp) {
+                GApi.execute('charlies', 'charliesEndpoint.getHighscores', {category: category, player: $rootScope.google_user.name}).then( function(resp) {
         			$scope.highscores = resp;
                     $scope.loading = false;
         		}, function() {

@@ -33,10 +33,10 @@ public class GeneratorManager {
 				generator = new ScientistsGenerator(nb,datastore);
 				break;
 			case "battles" :
-				generator = new BattlesGenerator(nb);
+				generator = new BattlesGenerator(nb, datastore);
 				break;
 			case "athletes" :
-				generator = new AthletesGenerator(nb);
+				generator = new AthletesGenerator(nb, datastore);
 				break;
 			default :
 		  		throw new UnknownCategoryException();
@@ -58,7 +58,7 @@ public class GeneratorManager {
 		for (QuerySolution sol : res){
 			String pic = sol.getResource("pic").toString();
 			String name = sol.getLiteral("name").toString();
-			String birth = sol.getLiteral("b").toString();
+			String birth = sol.getLiteral("b").toString().substring(0, 10);
 			String place = fixLocation(sol.getLiteral("c").toString());
 			scientists.add(new Scientist(pic, name, birth, place));
 		}
@@ -66,15 +66,43 @@ public class GeneratorManager {
 	}
 	
 	public List<Battle> generateBattles(List<QuerySolution> res){
-		//TODO Auto-generated method stub
-		return null;
+		List<Battle> battles = new ArrayList<Battle>();
+		String pic2;
+		for (int i=0; i<res.size(); ++i){
+			QuerySolution sol = res.get(i);
+			String pic = sol.getResource("pic").toString();
+			String commanders = sol.getLiteral("comm").toString();
+			String start = sol.getLiteral("date").toString().substring(0, 10);
+			String end = sol.getLiteral("date").toString().substring(0, 10);
+			String dates = start + " - " + end;
+			String place = fixLocation(sol.getLiteral("coun").toString());
+			int j = i;
+			do {
+				QuerySolution sol2 = res.get(++j);
+				pic2 = sol2.getResource("pic").toString();
+				if (!pic.equals(pic2)){
+					commanders += sol2.getLiteral("comm").toString();
+				}
+			} while (!pic.equals(pic2) && j-i < 5 && j<res.size());
+
+			battles.add(new Battle(pic, commanders, dates, place));
+		}
+		return battles;
 	}
 	
 	public List<Athlete> generateAthletes(List<QuerySolution> res){
-		//TODO Auto-generated method stub
-		return null;
+		List<Athlete> athletes = new ArrayList<Athlete>();
+		for (QuerySolution sol : res){
+			String pic = sol.getResource("pic").toString();
+			String name = sol.getLiteral("name").toString();
+			String birth = sol.getLiteral("b").toString().substring(0, 10);
+			String place = fixLocation(sol.getLiteral("c").toString());
+			athletes.add(new Athlete(pic, name, birth, place));
+		}
+		return athletes;
 	}
 	
+	//Make location matches with GoogleMaps' countries.
 	public String fixLocation(String location){
 		switch (location) {
 		case "Venda": location = "South Africa"; break;

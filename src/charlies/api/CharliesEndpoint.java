@@ -28,7 +28,7 @@ public class CharliesEndpoint {
 	private SparqlService sparql = new SparqlService();
 	
 	@ApiMethod(path="/highscores")
-	public Highscores getHighscores(@Named("category") @DefaultValue("") String category) {
+	public Highscores getHighscores(@Named("category") @DefaultValue("") String category, @Named("player") @DefaultValue("") String player) {
 		
 		List<Score> highscores = new ArrayList<Score>();
 		Score scorePlayer;
@@ -36,12 +36,12 @@ public class CharliesEndpoint {
 		
 		if (category.equals("")){
 			highscores = manager.listHighscores();
-			place = manager.getBetterPlace("Antoine CARAT");
+			place = manager.getBetterPlace(player);
 		} else {
 			highscores = manager.listHighscores(category);
-			place = manager.getBetterPlace("Antoine CARAT", category);
+			place = manager.getBetterPlace(player, category);
 		}
-		scorePlayer = manager.getBetterScore("Antoine CARAT");
+		scorePlayer = manager.getBetterScore(player);
 		
 		return new Highscores(highscores,place,scorePlayer);
 	}
@@ -64,11 +64,11 @@ public class CharliesEndpoint {
 	}
 
 	@ApiMethod(path="/fill")
-	public void insertQuestions(@Named("category") String category, @Named("number") int number) throws UnknownCategoryException{
+	public void insertQuestions(@Named("category") String category, @Named("number") int number) throws UnknownCategoryException, NoResultException{
 		switch(category){
 		case "scientists":
 			List<Scientist> s = generator.generateScientists(sparql.getScientists(number));
-			manager.fillScientists(s);
+			//manager.fillScientists(s);
 		case "battles":
 			List<Battle> b = generator.generateBattles(sparql.getBattles(number));
 			manager.fillBattles(b);

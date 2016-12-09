@@ -45,6 +45,5 @@ public class Scientist {
 	public void setPlace(String place) {
 		this.place = place;
 	}
-
 	
 }
