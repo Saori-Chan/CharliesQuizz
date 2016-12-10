@@ -88,7 +88,7 @@ app.config(function($routeProvider) {
 
 app.controller('HomeController', ['$scope', '$location',
     function($scope, $location) {
-
+	
         $scope.play = function() {
 
     		if (!$scope.google_user) {
@@ -99,7 +99,7 @@ app.controller('HomeController', ['$scope', '$location',
     			$location.path('/categories');
     		}
         };
-
+        
     }
 ]);
 

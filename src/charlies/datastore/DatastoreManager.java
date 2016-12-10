@@ -72,12 +72,40 @@ public class DatastoreManager {
 		return hs;
 	}
 	
-	public int getBetterPlace(String name){
-		return 14;
+	public int getBetterPlace(String nameP){
+		int place = 0;
+		List<Score> hs = new ArrayList<Score>();
+		Query q = new Query("Score").addSort("score", SortDirection.DESCENDING);;
+		List<Entity> results = datastore.prepare(q).asList(FetchOptions.Builder.withLimit(10));
+		
+		for (Entity e : results){
+			String Pname = (String) e.getProperty("name");
+			if (Pname.equals(nameP)){
+				return place+1;
+			} else {
+				++place;
+			}
+		}
+		return place;
 	}
 	
-	public int getBetterPlace(String name, String cat){
-		return 42;
+	public int getBetterPlace(String nameP, String cat){
+		int place = 0;
+		List<Score> hs = new ArrayList<Score>();
+		Filter catFilter = new FilterPredicate("category", FilterOperator.EQUAL, cat);
+		Query q = new Query("Score").setFilter(catFilter).addSort("score", SortDirection.DESCENDING);;
+		List<Entity> results = datastore.prepare(q).asList(FetchOptions.Builder.withLimit(10));
+		
+		for (Entity e : results){
+			String Pname = (String) e.getProperty("name");
+			if (Pname.equals(nameP)){
+				return place+1;
+			} else {
+				++place;
+			}
+		}
+		
+		return place;
 	}
 	
 	public Score getBetterScore(String pName){
