@@ -64,19 +64,24 @@ public class CharliesEndpoint {
 	}
 
 	@ApiMethod(path="/fill")
-	public void insertQuestions(@Named("category") String category, @Named("number") int number) throws UnknownCategoryException, NoResultException{
-		switch(category){
-		case "scientists":
-			List<Scientist> s = generator.generateScientists(sparql.getScientists(number));
-			//manager.fillScientists(s);
-		case "battles":
-			List<Battle> b = generator.generateBattles(sparql.getBattles(number));
-			manager.fillBattles(b);
-		case "athletes":
-			List<Athlete> a = generator.generateAthletes(sparql.getAthletes(number));
-			manager.fillAthletes(a);
-		default:
-			throw new UnknownCategoryException();
+	public void insertQuestions(@Named("category") String category, @Named("number") int number) throws Exception{
+		try {
+			switch(category){
+			case "scientists":
+				List<Scientist> s = generator.generateScientists(sparql.getScientists(number));
+				manager.fillScientists(s);
+			case "battles":
+				List<Battle> b = generator.generateBattles(sparql.getBattles(number));
+				manager.fillBattles(b);
+			case "athletes":
+				List<Athlete> a = generator.generateAthletes(sparql.getAthletes(number));
+				manager.fillAthletes(a);
+			default:
+				throw new UnknownCategoryException();
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 

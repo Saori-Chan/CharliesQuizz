@@ -45,9 +45,6 @@ public class SparqlService {
 		Query query = QueryFactory.create(request.toString());
 		QueryExecution qexec = QueryExecutionFactory.sparqlService("http://dbpedia.org/sparql", query);
 		ResultSet results = qexec.execSelect();
-		if (!results.hasNext()){
-			throw new NoResultException();
-		}
 		while (results.hasNext()){
 			solutions.add(results.next());
 		}
@@ -61,12 +58,12 @@ public class SparqlService {
 					   "PREFIX dbo: <http://dbpedia.org/ontology/>" +
 					   "PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>" +
 					   "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>" +
-					   "SELECT ?pic (STR(?n) AS ?nameBattle) ?date (STR(?c) AS ?coun) (STR(?com) AS ?comm)  ?p" +
+					   "SELECT DISTINCT ?pic (STR(?n) AS ?nameBattle) ?dateD (STR(?c) AS ?coun) (STR(?com) AS ?comm)  ?p" +
 					   "WHERE {" +
 					   "?p a dbo:MilitaryConflict;" +
 					   "   dbo:thumbnail ?pic;" +
 					   "   dbp:conflict ?n;" +
-					   "   dbo:date ?date;" +
+					   "   dbo:date ?dateD;" +
 					   "   dbp:place ?country;" +
 					   "   dbo:commander ?commandant." +
 					   "?country a dbo:Country;" +
@@ -74,19 +71,16 @@ public class SparqlService {
 					   "?commandant dbp:name ?com." +
 					   "FILTER NOT EXISTS {" +
 					   "   ?p a dbo:MilitaryConflict;" +
-					   "      dbo:date ?date." +
-					   "   FILTER regex(?date,'--')" +
+					   "      dbo:date ?dateD." +
+					   "   FILTER regex(?dateD,'--')" +
 					   "}" +
-					   "FILTER (?date > '1700-01-01'^^xsd:date)" +
+					   "FILTER (?dateD > '1700-01-01'^^xsd:date)" +
 					   "}" +
 					   "LIMIT" + number;
 	List<QuerySolution> solutions = new ArrayList<QuerySolution>();
 	Query query = QueryFactory.create(request.toString());
 	QueryExecution qexec = QueryExecutionFactory.sparqlService("http://dbpedia.org/sparql", query);
 	ResultSet results = qexec.execSelect();
-	if (!results.hasNext()){
-		throw new NoResultException();
-	}
 	while (results.hasNext()){
 		solutions.add(results.next());
 	}
@@ -124,15 +118,13 @@ public class SparqlService {
 						"   ?x dbp:gold ?p." +
 						"   FILTER regex(?date,'--')" +
 						"}" +
-						"}";
+						"}" +
+						"LIMIT " + number;
 		
 		List<QuerySolution> solutions = new ArrayList<QuerySolution>();
 		Query query = QueryFactory.create(request.toString());
 		QueryExecution qexec = QueryExecutionFactory.sparqlService("http://dbpedia.org/sparql", query);
 		ResultSet results = qexec.execSelect();
-		if (!results.hasNext()){
-			throw new NoResultException();
-		}
 		while (results.hasNext()){
 			solutions.add(results.next());
 		}

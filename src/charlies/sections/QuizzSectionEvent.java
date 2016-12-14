@@ -2,7 +2,7 @@ package charlies.sections;
 
 import java.util.List;
 
-public class QuizzSectionEvent extends QuizzSection{
+public class QuizzSectionEvent extends QuizzSection {
 
 	public QuizzSectionEvent(String pic, List<String> answersWho, List<String> answersWhen, List<String> answerWhere) {
 		super(pic,answersWho, answersWhen, answerWhere);

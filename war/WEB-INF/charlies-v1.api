@@ -52,6 +52,46 @@
         "body" : "autoTemplate(backendResponse)"
       }
     },
+    "charlies.charliesEndpoint.listCategories" : {
+      "path" : "/categories",
+      "httpMethod" : "GET",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "charlies.api.CharliesEndpoint.listCategories",
+      "request" : {
+        "body" : "empty"
+      },
+      "response" : {
+        "body" : "autoTemplate(backendResponse)"
+      }
+    },
+    "charlies.charliesEndpoint.insertQuestions" : {
+      "path" : "/fill",
+      "httpMethod" : "POST",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "charlies.api.CharliesEndpoint.insertQuestions",
+      "request" : {
+        "parameters" : {
+          "category" : {
+            "type" : "string",
+            "required" : true
+          },
+          "number" : {
+            "type" : "int32",
+            "required" : true
+          }
+        },
+        "body" : "empty"
+      },
+      "response" : {
+        "body" : "empty"
+      }
+    },
     "charlies.charliesEndpoint.listQuestions" : {
       "path" : "/questions",
       "httpMethod" : "GET",
@@ -116,46 +156,6 @@
       "response" : {
         "body" : "empty"
       }
-    },
-    "charlies.charliesEndpoint.listCategories" : {
-      "path" : "/categories",
-      "httpMethod" : "GET",
-      "authLevel" : "NONE",
-      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
-      "audiences" : [ ],
-      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
-      "rosyMethod" : "charlies.api.CharliesEndpoint.listCategories",
-      "request" : {
-        "body" : "empty"
-      },
-      "response" : {
-        "body" : "autoTemplate(backendResponse)"
-      }
-    },
-    "charlies.charliesEndpoint.insertQuestions" : {
-      "path" : "/fill",
-      "httpMethod" : "POST",
-      "authLevel" : "NONE",
-      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
-      "audiences" : [ ],
-      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
-      "rosyMethod" : "charlies.api.CharliesEndpoint.insertQuestions",
-      "request" : {
-        "parameters" : {
-          "category" : {
-            "type" : "string",
-            "required" : true
-          },
-          "number" : {
-            "type" : "int32",
-            "required" : true
-          }
-        },
-        "body" : "empty"
-      },
-      "response" : {
-        "body" : "empty"
-      }
     }
   },
   "descriptor" : {
@@ -194,6 +194,18 @@
           "score" : {
             "type" : "string",
             "format" : "int64"
+          }
+        }
+      },
+      "StringCollection" : {
+        "id" : "StringCollection",
+        "type" : "object",
+        "properties" : {
+          "items" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            }
           }
         }
       },
@@ -241,18 +253,6 @@
             }
           }
         }
-      },
-      "StringCollection" : {
-        "id" : "StringCollection",
-        "type" : "object",
-        "properties" : {
-          "items" : {
-            "type" : "array",
-            "items" : {
-              "type" : "string"
-            }
-          }
-        }
       }
     },
     "methods" : {
@@ -261,19 +261,19 @@
           "$ref" : "Highscores"
         }
       },
-      "charlies.api.CharliesEndpoint.listQuestions" : {
-        "response" : {
-          "$ref" : "QuizzSectionCollection"
-        }
-      },
-      "charlies.api.CharliesEndpoint.insertScore" : {
-      },
       "charlies.api.CharliesEndpoint.listCategories" : {
         "response" : {
           "$ref" : "StringCollection"
         }
       },
       "charlies.api.CharliesEndpoint.insertQuestions" : {
+      },
+      "charlies.api.CharliesEndpoint.listQuestions" : {
+        "response" : {
+          "$ref" : "QuizzSectionCollection"
+        }
+      },
+      "charlies.api.CharliesEndpoint.insertScore" : {
       }
     }
   }

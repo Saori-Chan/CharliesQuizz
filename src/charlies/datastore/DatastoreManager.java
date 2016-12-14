@@ -141,8 +141,9 @@ public class DatastoreManager {
 	}
 
 	public void fillScientists(List<Scientist> scientists) {
+		Entity e;
 		for (Scientist s : scientists){
-			Entity e = new Entity("Scientist");
+			e = new Entity("Scientist");
 			e.setProperty("pic", s.getPic());
 			e.setProperty("name", s.getName());
 			e.setProperty("birth", s.getBirth());
@@ -152,19 +153,21 @@ public class DatastoreManager {
 	}
 
 	public void fillBattles(List<Battle> battles) {
+		Entity e;
 		for (Battle b : battles){
-			Entity e = new Entity("Battle");
+			e = new Entity("Battle");
 			e.setProperty("pic", b.getPic());
 			e.setProperty("commanders", b.getCommanders());
-			e.setProperty("dates", b.getDates());
+			e.setProperty("date", b.getDate());
 			e.setProperty("place", b.getPlace());
 			datastore.put(e);			
 		}
 	}
 
 	public void fillAthletes(List<Athlete> athletes) {
+		Entity e;
 		for (Athlete a : athletes){
-			Entity e = new Entity("Athlete");
+			e = new Entity("Athlete");
 			e.setProperty("pic", a.getPic());
 			e.setProperty("name", a.getName());
 			e.setProperty("birth", a.getBirth());

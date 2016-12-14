@@ -4,14 +4,14 @@ public class Battle {
 
 	private String pic;
 	private String commanders;
-	private String dates;
+	private String date;
 	private String place;
 	
-	public Battle(String pic, String commanders, String dates, String place) {
+	public Battle(String pic, String commanders, String date, String place) {
 		super();
 		this.pic = pic;
 		this.commanders = commanders;
-		this.dates = dates;
+		this.date = date;
 		this.place = place;
 	}
 
@@ -31,12 +31,12 @@ public class Battle {
 		this.commanders = commanders;
 	}
 
-	public String getDates() {
-		return dates;
+	public String getDate() {
+		return date;
 	}
 
-	public void setDates(String dates) {
-		this.dates = dates;
+	public void setDates(String date) {
+		this.date = date;
 	}
 
 	public String getPlace() {

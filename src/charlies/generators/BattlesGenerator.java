@@ -7,7 +7,7 @@ import charlies.datastore.DatastoreManager;
 import charlies.entities.Battle;
 import charlies.exceptions.NoResultException;
 import charlies.sections.QuizzSection;
-import charlies.sections.QuizzSectionPerson;
+import charlies.sections.QuizzSectionEvent;
 
 public class BattlesGenerator extends SectionGenerator {
 	
@@ -46,12 +46,12 @@ public class BattlesGenerator extends SectionGenerator {
 			answersWho.add(b.getCommanders());
 			answersWho.add(b1.getCommanders());
 			answersWho.add(b2.getCommanders());
-			answersWhen.add(b.getDates());
-			answersWhen.add(b1.getDates());
-			answersWhen.add(b2.getDates());
+			answersWhen.add(b.getDate());
+			answersWhen.add(b1.getDate());
+			answersWhen.add(b2.getDate());
 			answersWhere.add(b.getPlace());
 			
-			list.add(new QuizzSectionPerson(b.getPic(), answersWho, answersWhen, answersWhere));
+			list.add(new QuizzSectionEvent(b.getPic(), answersWho, answersWhen, answersWhere));
 		}
 		
 		return list;
