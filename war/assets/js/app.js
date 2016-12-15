@@ -50,9 +50,14 @@ app.run(['$rootScope', '$cookies', 'GApi', 'GData', 'GAuth',
         GAuth.checkAuth().then(
     		function(user) {
     			$rootScope.google_user = user;
+                if ($rootScope.auth_callback_success)
+                    $rootScope.auth_callback_success();
     		},
     		function() {
-    			console.log('error');
+    			//console.log('error');
+                console.log('not logged');
+                if ($rootScope.auth_callback_error)
+                    $rootScope.auth_callback_error();
     		}
     	);
 
@@ -139,11 +144,11 @@ app.controller('CategoriesController', ['$rootScope', '$scope', '$location', 'GA
 
             GApi.execute('charlies', 'charliesEndpoint.listQuestions',{number: count, category: category}).then( function(resp) {
                 $rootScope.currentGame.subjects = resp.items;
-                console.log(resp.items);
+                //console.log(resp.items);
                 $location.path('/game/round/0/who');
     		}, function() {
                 $scope.loading = false;
-    			console.log("error :(");
+    			console.log("error while loading questions :(");
     		});
 
         };
@@ -176,14 +181,14 @@ app.controller('GameController', ['$rootScope', '$scope', '$routeParams', '$loca
 
         $scope.chooseAnswer = function(index) {
 
-            if ($scope.question.answered != null)
+            if ($scope.question.answered !== null)
                 return;
-
-            $scope.timer.stop();
 
             $scope.question.answered = index;
 
-            if ($scope.question.answered == $scope.question.right_answer) {
+            $scope.timer.stop();
+
+            if ($scope.question.answered === $scope.question.right_answer) {
                 $rootScope.currentGame.score += $scope.timer.percentage*5;
             }
 
@@ -292,6 +297,7 @@ app.controller('GameController', ['$rootScope', '$scope', '$routeParams', '$loca
                     clearInterval($scope.timer.id);
                     $scope.timer.id = null;
                     $scope.chooseAnswer("No answer");
+                    $scope.$apply();
                 }
             }
         };
@@ -343,39 +349,46 @@ app.controller('HighscoresController', ['$rootScope', '$scope', '$location', 'GA
 
         GApi.execute('charlies', 'charliesEndpoint.listCategories').then( function(resp) {
             $scope.categories = resp.items;
-            $scope.loading = false;
+            //$scope.loading = false;
         }, function() {
-            $scope.loading = false;
+            //$scope.loading = false;
             console.log("error :(");
         });
 
         $('ul.tabs').tabs();
 
-        $scope.loadHighscores = function(category) {
-            $scope.selectHighscore = true;
+        $rootScope.auth_callback_success = function() {
+            $scope.loadHighscores = function(category) {
+                $scope.selectHighscore = true;
 
-            if (category == "all") {
-                $scope.highscoreCategory = true;
-                GApi.execute('charlies', 'charliesEndpoint.getHighscores', {player: $rootScope.google_user.name}).then( function(resp) {
-        			$scope.highscores = resp;
-                    $scope.loading = false;
-        		}, function() {
-                    $scope.loading = false;
-        			console.log("error :(");
-        		});
-            }else {
-                $scope.highscoreCategory = false;
-                GApi.execute('charlies', 'charliesEndpoint.getHighscores', {category: category, player: $rootScope.google_user.name}).then( function(resp) {
-        			$scope.highscores = resp;
-                    $scope.loading = false;
-        		}, function() {
-                    $scope.loading = false;
-        			console.log("error :(");
-        		});
-            }
-        };
+                if (category == "all") {
+                    $scope.highscoreCategory = true;
+                    GApi.execute('charlies', 'charliesEndpoint.getHighscores', {player: $rootScope.google_user.name}).then( function(resp) {
+            			$scope.highscores = resp;
+                        $scope.loading = false;
+            		}, function(err) {
+                        $scope.loading = false;
+                        console.log(err);
+            			console.log("error :(");
+            		});
+                }else {
+                    $scope.highscoreCategory = false;
+                    GApi.execute('charlies', 'charliesEndpoint.getHighscores', {category: category, player: $rootScope.google_user.name}).then( function(resp) {
+            			$scope.highscores = resp;
+                        $scope.loading = false;
+            		}, function() {
+                        $scope.loading = false;
+            			console.log("error :(");
+            		});
+                }
+            };
 
-        $scope.loadHighscores('all');
+            $scope.loadHighscores('all');
+        }
+
+        $rootScope.auth_callback_error = function() {
+            $scope.login($rootScope.auth_callback_success);
+        }
     }
 ]);
 
