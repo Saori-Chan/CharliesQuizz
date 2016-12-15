@@ -88,7 +88,7 @@ app.config(function($routeProvider) {
 
 app.controller('HomeController', ['$scope', '$location',
     function($scope, $location) {
-	
+
         $scope.play = function() {
 
     		if (!$scope.google_user) {
@@ -99,7 +99,7 @@ app.controller('HomeController', ['$scope', '$location',
     			$location.path('/categories');
     		}
         };
-        
+
     }
 ]);
 
@@ -353,7 +353,7 @@ app.controller('HighscoresController', ['$rootScope', '$scope', '$location', 'GA
 
         $scope.loadHighscores = function(category) {
             $scope.selectHighscore = true;
-            
+
             if (category == "all") {
                 $scope.highscoreCategory = true;
                 GApi.execute('charlies', 'charliesEndpoint.getHighscores', {player: $rootScope.google_user.name}).then( function(resp) {
