@@ -289,15 +289,16 @@ app.controller('GameController', ['$rootScope', '$scope', '$routeParams', '$loca
                     $scope.timer.percentage -= 2;
                     $scope.$apply();
                     if ($scope.timer.percentage <= 0)
-                        $scope.timer.stop();
+                        $scope.timer.stop(true);
                 },200);
             },
-            stop: function() {
+            stop: function(out) {
                 if ($scope.timer.id != null) {
                     clearInterval($scope.timer.id);
                     $scope.timer.id = null;
                     $scope.chooseAnswer("No answer");
-                    $scope.$apply();
+                    if (out)
+                        $scope.$apply();
                 }
             }
         };
