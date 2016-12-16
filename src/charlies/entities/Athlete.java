@@ -6,12 +6,16 @@ public class Athlete {
 	private String name;
 	private String birth;
 	private String place;
+	private String abst;
+	private String link;
 	
-	public Athlete(String pic, String name, String birth, String place) {
+	public Athlete(String pic, String name, String birth, String place, String abst, String link) {
 		this.pic = pic;
 		this.name = name;
 		this.birth = birth;
 		this.place = place;
+		this.abst = abst;
+		this.link= link;
 	}
 
 	public String getPic() {
@@ -44,6 +48,22 @@ public class Athlete {
 
 	public void setPlace(String place) {
 		this.place = place;
+	}
+
+	public String getAbst() {
+		return abst;
+	}
+
+	public void setAbst(String abst) {
+		this.abst = abst;
+	}
+
+	public String getLink() {
+		return link;
+	}
+
+	public void setLink(String link) {
+		this.link = link;
 	}
 	
 }

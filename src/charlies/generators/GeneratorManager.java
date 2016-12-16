@@ -60,33 +60,40 @@ public class GeneratorManager {
 			String name = sol.getLiteral("name").toString();
 			String birth = sol.getLiteral("b").toString().substring(0, 10);
 			String place = fixLocation(sol.getLiteral("c").toString());
-			scientists.add(new Scientist(pic, name, birth, place));
+			String abstr = sol.getLiteral("abst").toString();
+			String link = sol.getResource("link").toString();
+			scientists.add(new Scientist(pic, name, birth, place, abstr, link));
 		}
 		return scientists;
 	}
 	
-	public List<Battle> generateBattles(List<QuerySolution> res){
+	public List<Battle> generateBattles(List<QuerySolution> res) throws NoResultException{
 		List<Battle> battles = new ArrayList<Battle>();
-		String pic2;
 		for (int i=0; i<res.size(); ++i){
 			QuerySolution sol = res.get(i);
 			String pic = sol.getResource("pic").toString();
 			String commanders = sol.getLiteral("comm").toString();
 			String date = sol.getLiteral("dateD").toString().substring(0, 10);
 			String place = fixLocation(sol.getLiteral("coun").toString());
-			
-			/*int j = i;
-			QuerySolution sol2 = res.get(++j);
-			pic2 = sol2.getResource("pic").toString();
+			String name = sol.getLiteral("nameBattle").toString();
+			String abstr = sol.getLiteral("abst").toString();
+			String link = sol.getResource("link").toString();
+						
+			int j = i+1;
+			/*QuerySolution sol2 = res.get(j);
+			String pic2 = sol2.getResource("pic").toString();
 			while (!pic.equals(pic2) && j<res.size()) {
+				if (j-i < 5){//On prends les 5 premiers commanders
+					commanders += " ; " + sol2.getLiteral("comm").toString();
+				}
 				sol2 = res.get(++j);
 				pic2 = sol2.getResource("pic").toString();
-				if (!pic.equals(pic2) && j-i < 5){//On prends les 5 premiers commanders
-					commanders += sol2.getLiteral("comm").toString();
-				}
 			}*/
-
-			battles.add(new Battle(pic, commanders, date, place));
+			battles.add(new Battle(pic, commanders, date, place, name, abstr, link));
+			i = j;
+		}
+		if (battles.isEmpty()){
+			throw new NoResultException();
 		}
 		return battles;
 	}
@@ -98,7 +105,9 @@ public class GeneratorManager {
 			String name = sol.getLiteral("name").toString();
 			String birth = sol.getLiteral("date").toString().substring(0, 10);
 			String place = fixLocation(sol.getLiteral("c").toString());
-			athletes.add(new Athlete(pic, name, birth, place));
+			String abstr = sol.getLiteral("abst").toString();
+			String link = sol.getResource("link").toString();
+			athletes.add(new Athlete(pic, name, birth, place, abstr, link));
 		}
 		return athletes;
 	}

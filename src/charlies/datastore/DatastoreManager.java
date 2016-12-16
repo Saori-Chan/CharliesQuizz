@@ -7,6 +7,7 @@ import charlies.entities.Athlete;
 import charlies.entities.Battle;
 import charlies.entities.Scientist;
 import charlies.entities.Score;
+import charlies.exceptions.NoResultException;
 import charlies.generators.SparqlService;
 
 import com.google.appengine.api.datastore.DatastoreService;
@@ -74,9 +75,8 @@ public class DatastoreManager {
 	
 	public int getBetterPlace(String nameP){
 		int place = 0;
-		List<Score> hs = new ArrayList<Score>();
 		Query q = new Query("Score").addSort("score", SortDirection.DESCENDING);;
-		List<Entity> results = datastore.prepare(q).asList(FetchOptions.Builder.withLimit(10));
+		List<Entity> results = datastore.prepare(q).asList(FetchOptions.Builder.withDefaults());
 		
 		for (Entity e : results){
 			String Pname = (String) e.getProperty("name");
@@ -91,10 +91,9 @@ public class DatastoreManager {
 	
 	public int getBetterPlace(String nameP, String cat){
 		int place = 0;
-		List<Score> hs = new ArrayList<Score>();
 		Filter catFilter = new FilterPredicate("category", FilterOperator.EQUAL, cat);
 		Query q = new Query("Score").setFilter(catFilter).addSort("score", SortDirection.DESCENDING);;
-		List<Entity> results = datastore.prepare(q).asList(FetchOptions.Builder.withLimit(10));
+		List<Entity> results = datastore.prepare(q).asList(FetchOptions.Builder.withDefaults());
 		
 		for (Entity e : results){
 			String Pname = (String) e.getProperty("name");
@@ -140,7 +139,10 @@ public class DatastoreManager {
 		return s;
 	}
 
-	public void fillScientists(List<Scientist> scientists) {
+	public void fillScientists(List<Scientist> scientists) throws NoResultException {
+		if (scientists.isEmpty()){
+			throw new NoResultException();
+		}
 		Entity e;
 		for (Scientist s : scientists){
 			e = new Entity("Scientist");
@@ -148,11 +150,13 @@ public class DatastoreManager {
 			e.setProperty("name", s.getName());
 			e.setProperty("birth", s.getBirth());
 			e.setProperty("place", s.getPlace());
-			datastore.put(e);			
+			e.setProperty("abstract", s.getAbst());
+			e.setProperty("link", s.getLink());
+			datastore.put(e);
 		}
 	}
 
-	public void fillBattles(List<Battle> battles) {
+	public void fillBattles(List<Battle> battles) throws NoResultException {
 		Entity e;
 		for (Battle b : battles){
 			e = new Entity("Battle");
@@ -160,11 +164,17 @@ public class DatastoreManager {
 			e.setProperty("commanders", b.getCommanders());
 			e.setProperty("date", b.getDate());
 			e.setProperty("place", b.getPlace());
+			e.setProperty("name", b.getName());
+			e.setProperty("abstract", b.getAbst());
+			e.setProperty("link", b.getLink());
 			datastore.put(e);			
 		}
 	}
 
-	public void fillAthletes(List<Athlete> athletes) {
+	public void fillAthletes(List<Athlete> athletes) throws NoResultException {
+		if (athletes.isEmpty()){
+			throw new NoResultException();
+		}
 		Entity e;
 		for (Athlete a : athletes){
 			e = new Entity("Athlete");
@@ -172,6 +182,8 @@ public class DatastoreManager {
 			e.setProperty("name", a.getName());
 			e.setProperty("birth", a.getBirth());
 			e.setProperty("place", a.getPlace());
+			e.setProperty("abstract", a.getAbst());
+			e.setProperty("link", a.getLink());
 			datastore.put(e);			
 		}
 	}
@@ -186,7 +198,9 @@ public class DatastoreManager {
 			String name = (String) e.getProperty("name");
 			String birth = (String) e.getProperty("birth");
 			String place = (String) e.getProperty("place");
-			scientists.add(new Scientist(pic, name, birth, place));
+			String abstr = (String) e.getProperty("abstract");
+			String link = (String) e.getProperty("link");
+			scientists.add(new Scientist(pic, name, birth, place, abstr, link));
 		}
 		
 		return scientists;
@@ -199,10 +213,13 @@ public class DatastoreManager {
 		
 		for (Entity e : results){
 			String pic = (String) e.getProperty("pic");
-			String name = (String) e.getProperty("commanders");
+			String commanders = (String) e.getProperty("commanders");
 			String birth = (String) e.getProperty("dates");
 			String place = (String) e.getProperty("place");
-			battles.add(new Battle(pic, name, birth, place));
+			String name = (String) e.getProperty("name");
+			String abstr = (String) e.getProperty("abstract");
+			String link = (String) e.getProperty("link");
+			battles.add(new Battle(pic, commanders, birth, place, name, abstr, link));
 		}
 		
 		return battles;
@@ -218,7 +235,9 @@ public class DatastoreManager {
 			String name = (String) e.getProperty("name");
 			String birth = (String) e.getProperty("birth");
 			String place = (String) e.getProperty("place");
-			athletes.add(new Athlete(pic, name, birth, place));
+			String abstr = (String) e.getProperty("abstract");
+			String link = (String) e.getProperty("link");
+			athletes.add(new Athlete(pic, name, birth, place, abstr, link));
 		}
 		
 		return athletes;

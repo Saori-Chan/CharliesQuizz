@@ -33,16 +33,25 @@ public class BattlesGenerator extends SectionGenerator {
 			answersWhere = new ArrayList<String>();
 			
 			r = (int)(Math.random() * battles.size());
+			Battle b = battles.get(r);
+			
 			r1 = (int)(Math.random() * battles.size());
 			r2 = (int)(Math.random() * battles.size());
-			while (!(r != r1) && (r != r2)){
-				r1 = (int)(Math.random() * battles.size());
-				r2 = (int)(Math.random() * battles.size());
-			}
-			
-			Battle b = battles.get(r);
 			Battle b1 = battles.get(r1);
 			Battle b2 = battles.get(r2);
+			while ((r == r1) 
+					|| (r == r2) 
+					|| (b.getCommanders().equals(b1.getCommanders()))
+					|| (b.getCommanders().equals(b2.getCommanders()))
+					|| (b.getDate().equals(b1.getDate()))
+					|| (b.getDate().equals(b2.getDate()))
+			){
+				r1 = (int)(Math.random() * battles.size());
+				r2 = (int)(Math.random() * battles.size());
+				b1 = battles.get(r1);
+				b2 = battles.get(r2);
+			}
+			
 			answersWho.add(b.getCommanders());
 			answersWho.add(b1.getCommanders());
 			answersWho.add(b2.getCommanders());
@@ -51,7 +60,7 @@ public class BattlesGenerator extends SectionGenerator {
 			answersWhen.add(b2.getDate());
 			answersWhere.add(b.getPlace());
 			
-			list.add(new QuizzSectionEvent(b.getPic(), answersWho, answersWhen, answersWhere));
+			list.add(new QuizzSectionEvent(b.getPic(), answersWho, answersWhen, answersWhere, b.getName(), b.getAbst(), b.getLink()));
 		}
 		
 		return list;

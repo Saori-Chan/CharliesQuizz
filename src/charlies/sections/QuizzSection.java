@@ -8,12 +8,18 @@ public abstract class QuizzSection {
 	protected QuestionBlock who;
 	protected QuestionBlock when;
 	protected QuestionBlock where;
+	private String hint;
+	private String abst;
+	private String link;
 		
-	public QuizzSection(String pic, List<String> whoAnswers, List<String> whenAnswers, List<String> whereAnswers) {
+	public QuizzSection(String pic, List<String> whoAnswers, List<String> whenAnswers, List<String> whereAnswers, String hint, String abst, String link) {
 		this.pic = pic;
 		this.who = new QuestionBlock(whoAnswers);
 		this.when = new QuestionBlock(whenAnswers);
 		this.where = new QuestionBlock(whereAnswers);
+		this.hint = hint;
+		this.abst = abst;
+		this.link = link;
 	}
 
 	public String getPic() {
@@ -46,6 +52,30 @@ public abstract class QuizzSection {
 
 	public void setWhere(QuestionBlock where) {
 		this.where = where;
+	}
+
+	public String getHint() {
+		return hint;
+	}
+
+	public void setHint(String hint) {
+		this.hint = hint;
+	}
+
+	public String getAbst() {
+		return abst;
+	}
+
+	public void setAbst(String abst) {
+		this.abst = abst;
+	}
+
+	public String getLink() {
+		return link;
+	}
+
+	public void setLink(String link) {
+		this.link = link;
 	}
 
 	

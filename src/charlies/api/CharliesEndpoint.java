@@ -64,17 +64,17 @@ public class CharliesEndpoint {
 	}
 
 	@ApiMethod(path="/fill")
-	public void insertQuestions(@Named("category") String category, @Named("number") int number) throws Exception{
+	public void insertQuestions(@Named("category") String category) throws Exception{
 		try {
 			switch(category){
 			case "scientists":
-				List<Scientist> s = generator.generateScientists(sparql.getScientists(number));
+				List<Scientist> s = generator.generateScientists(sparql.getScientists());
 				manager.fillScientists(s);
 			case "battles":
-				List<Battle> b = generator.generateBattles(sparql.getBattles(number));
+				List<Battle> b = generator.generateBattles(sparql.getBattles());
 				manager.fillBattles(b);
 			case "athletes":
-				List<Athlete> a = generator.generateAthletes(sparql.getAthletes(number));
+				List<Athlete> a = generator.generateAthletes(sparql.getAthletes());
 				manager.fillAthletes(a);
 			default:
 				throw new UnknownCategoryException();

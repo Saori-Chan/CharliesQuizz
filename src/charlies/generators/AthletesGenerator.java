@@ -32,16 +32,25 @@ public class AthletesGenerator extends SectionGenerator {
 			answersWhere = new ArrayList<String>();
 			
 			r = (int)(Math.random() * athletes.size());
+			Athlete a = athletes.get(r);
+			
 			r1 = (int)(Math.random() * athletes.size());
 			r2 = (int)(Math.random() * athletes.size());
-			while (!(r != r1) && (r != r2)){
-				r1 = (int)(Math.random() * athletes.size());
-				r2 = (int)(Math.random() * athletes.size());
-			}
-			
-			Athlete a = athletes.get(r);
 			Athlete a1 = athletes.get(r1);
 			Athlete a2 = athletes.get(r2);
+			while ((r == r1) 
+					|| (r == r2) 
+					|| (a.getName().equals(a1.getName()))
+					|| (a.getName().equals(a2.getName()))
+					|| (a.getBirth().equals(a1.getBirth()))
+					|| (a.getBirth().equals(a2.getBirth()))
+			){
+				r1 = (int)(Math.random() * athletes.size());
+				r2 = (int)(Math.random() * athletes.size());
+				a1 = athletes.get(r1);
+				a2 = athletes.get(r2);
+			}
+			
 			answersWho.add(a.getName());
 			answersWho.add(a1.getName());
 			answersWho.add(a2.getName());
@@ -50,7 +59,7 @@ public class AthletesGenerator extends SectionGenerator {
 			answersWhen.add(a2.getBirth());
 			answersWhere.add(a.getPlace());
 			
-			list.add(new QuizzSectionPerson(a.getPic(), answersWho, answersWhen, answersWhere));
+			list.add(new QuizzSectionPerson(a.getPic(), answersWho, answersWhen, answersWhere, null, a.getAbst(), a.getLink()));
 		}
 		
 		return list;

@@ -16,22 +16,26 @@ public class SparqlService {
 	
 	private String request;
 
-	public List<QuerySolution> getScientists(int number) throws NoResultException {
+	public List<QuerySolution> getScientists() throws NoResultException {
 		this.request = "PREFIX dbr: <http://dbpedia.org/resource/>" +
 					   "PREFIX dbp: <http://dbpedia.org/property/>" +
 					   "PREFIX dbo: <http://dbpedia.org/ontology/>" +
 					   "PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>" +
 					   "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>" +
-					   "SELECT distinct (STR(?n) AS ?name) (STR(?nat) AS ?c) ?b ?pic ?p" +
+					   "PREFIX foaf: <http://xmlns.com/foaf/0.1/>" +
+					   "SELECT distinct (STR(?n) AS ?name) (STR(?nat) AS ?c) (STR(?abstract) AS ?abst) ?link ?b ?pic ?p" +
 						"WHERE {" +
 						"	?p a dbo:Scientist;" +
 						"   	dbp:name ?n;" +
 						"		dbp:field dbr:Computer_science;" +
 						"		dbo:birthDate ?b;" +
 						"		dbo:birthPlace ?country;" +
-						"		dbo:thumbnail ?pic ." +
+						"		dbo:thumbnail ?pic;" +
+						"       rdfs:comment ?abstract;" +
+						"       foaf:isPrimaryTopicOf ?link." +
 						"	?country a dbo:Country;" +
 						"    	  	 dbp:commonName ?nat ." +
+   						" 	FILTER ( lang(?abstract) = \"en\" )" +
 						"	FILTER NOT EXISTS {" +
 						"		?p a dbo:Scientist;" +
 						"   	   dbp:name ?n;" +
@@ -39,8 +43,7 @@ public class SparqlService {
 						"		FILTER REGEX(?n, ',')" +
 						"	}" +
 						"	FILTER REGEX(?b,'-')" +
-						"}" +
-						"LIMIT" + number;
+						"}" ;
 		List<QuerySolution> solutions = new ArrayList<QuerySolution>();
 		Query query = QueryFactory.create(request.toString());
 		QueryExecution qexec = QueryExecutionFactory.sparqlService("http://dbpedia.org/sparql", query);
@@ -52,23 +55,27 @@ public class SparqlService {
 		return solutions;
 	}
 	
-	public List<QuerySolution> getBattles(int number) throws NoResultException {
+	public List<QuerySolution> getBattles() throws NoResultException {
 		this.request = "PREFIX dbr: <http://dbpedia.org/resource/>" +
 					   "PREFIX dbp: <http://dbpedia.org/property/>" +
 					   "PREFIX dbo: <http://dbpedia.org/ontology/>" +
 					   "PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>" +
 					   "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>" +
-					   "SELECT DISTINCT ?pic (STR(?n) AS ?nameBattle) ?dateD (STR(?c) AS ?coun) (STR(?com) AS ?comm)  ?p" +
+					   "PREFIX foaf: <http://xmlns.com/foaf/0.1/>" +
+					   "SELECT DISTINCT ?pic (STR(?n) AS ?nameBattle) ?dateD (STR(?c) AS ?coun) (STR(?com) AS ?comm) (STR(?abstract) AS ?abst) ?link  ?p" +
 					   "WHERE {" +
 					   "?p a dbo:MilitaryConflict;" +
 					   "   dbo:thumbnail ?pic;" +
 					   "   dbp:conflict ?n;" +
 					   "   dbo:date ?dateD;" +
 					   "   dbp:place ?country;" +
-					   "   dbo:commander ?commandant." +
+					   "   dbo:commander ?commandant;" +
+					   "   rdfs:comment ?abstract;" +
+					   "   foaf:isPrimaryTopicOf ?link." +
 					   "?country a dbo:Country;" +
 					   "         dbp:commonName ?c." +
 					   "?commandant dbp:name ?com." +
+					   "FILTER ( lang(?abstract) = \"en\" )" +
 					   "FILTER NOT EXISTS {" +
 					   "   ?p a dbo:MilitaryConflict;" +
 					   "      dbo:date ?dateD." +
@@ -76,7 +83,7 @@ public class SparqlService {
 					   "}" +
 					   "FILTER (?dateD > '1700-01-01'^^xsd:date)" +
 					   "}" +
-					   "LIMIT" + number;
+					   "ORDER BY ?dateD";
 	List<QuerySolution> solutions = new ArrayList<QuerySolution>();
 	Query query = QueryFactory.create(request.toString());
 	QueryExecution qexec = QueryExecutionFactory.sparqlService("http://dbpedia.org/sparql", query);
@@ -88,23 +95,27 @@ public class SparqlService {
 	return solutions;
 	}
 	
-	public List<QuerySolution> getAthletes(int number) throws NoResultException {
+	public List<QuerySolution> getAthletes() throws NoResultException {
 		this.request =  "PREFIX dbr: <http://dbpedia.org/resource/>" +
 						"PREFIX dbp: <http://dbpedia.org/property/>" +
 						"PREFIX dbo: <http://dbpedia.org/ontology/>" +
 						"PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>" +
 						"PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>" +
-				   		"SELECT DISTINCT (STR(?n) AS ?name) ?date (STR(?nat) AS ?c) ?pic ?p" +
+						"PREFIX foaf: <http://xmlns.com/foaf/0.1/>" +
+				   		"SELECT DISTINCT (STR(?n) AS ?name) ?date (STR(?nat) AS ?c) (STR(?abstract) AS ?abst) ?link ?pic ?p" +
 					    "WHERE {" +
 						"{" + 
 						"   ?p a dbo:Athlete;" +
 						"  	   dbp:name ?n;" +
 						"	   dbp:birthDate ?date;" +
 						"	   dbp:birthPlace ?country;" +
-						" 	   dbo:thumbnail ?pic." +
+						" 	   dbo:thumbnail ?pic;" +
+						"      rdfs:comment ?abstract;" +
+						"      foaf:isPrimaryTopicOf ?link." +
 						"   ?x dbp:gold ?p." +
 						"   ?country a dbo:Country;" +
 						"            dbp:commonName ?nat." +
+						" 	FILTER ( lang(?abstract) = \"en\" )" +
 						"   FILTER NOT EXISTS {" +
 						"      ?p a dbo:Athlete;" +
 						"         dbp:name ?n." +
@@ -118,8 +129,7 @@ public class SparqlService {
 						"   ?x dbp:gold ?p." +
 						"   FILTER regex(?date,'--')" +
 						"}" +
-						"}" +
-						"LIMIT " + number;
+						"}";
 		
 		List<QuerySolution> solutions = new ArrayList<QuerySolution>();
 		Query query = QueryFactory.create(request.toString());
