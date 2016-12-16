@@ -350,9 +350,9 @@ app.controller('HighscoresController', ['$rootScope', '$scope', '$location', 'GA
 
         GApi.execute('charlies', 'charliesEndpoint.listCategories').then( function(resp) {
             $scope.categories = resp.items;
-            //$scope.loading = false;
+            $scope.loading = false;
         }, function() {
-            //$scope.loading = false;
+            $scope.loading = false;
             console.log("error :(");
         });
 
