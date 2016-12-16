@@ -54,6 +54,7 @@ app.run(['$rootScope', '$cookies', 'GApi', 'GData', 'GAuth',
                     $rootScope.auth_callback_success();
     		},
     		function() {
+                $rootScope.not_logged = true;
     			//console.log('error');
                 console.log('not logged');
                 if ($rootScope.auth_callback_error)
@@ -389,6 +390,10 @@ app.controller('HighscoresController', ['$rootScope', '$scope', '$location', 'GA
 
         $rootScope.auth_callback_error = function() {
             $scope.login($rootScope.auth_callback_success);
+        }
+
+        if ($rootScope.not_logged) {
+            $rootScope.auth_callback_error();
         }
     }
 ]);
