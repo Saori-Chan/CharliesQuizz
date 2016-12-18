@@ -7,7 +7,7 @@ Charlie's Quizz has only one rule and it is simple : You have to answer the ques
 
 You just have to choose a category and try to beat other users !
 
-You can access Charlie's Quizz [here](http://1-dot-helloworld44230.appspot.com/).
+You can access Charlie's Quizz [here](http://charlies-quizz.appspot.com/).
 
 ## Development team
 

@@ -1,7 +1,7 @@
 
 /* Hard Coded stuff */
-var CLIENT = '78472264515-sudi3vpi8tr2dqi4ug43pmn1vtd8dhuo.apps.googleusercontent.com';
-var BASE = 'https://1-dot-helloworld44230.appspot.com/_ah/api';
+var CLIENT = '620396730756-7p8qf81a760du2gk1ga7amrft9u6h92l.apps.googleusercontent.com';
+var BASE = 'https://charlies-quizz.appspot.com/_ah/api';
 
 
 var app = angular.module('appGame', ['angular-google-gapi', 'ngRoute', 'ngCookies']);
@@ -132,7 +132,7 @@ app.controller('CategoriesController', ['$rootScope', '$scope', '$location', 'GA
         $scope.choose = function(category_id) {
 
             var category = $scope.categories[category_id];
-            var count = 2;
+            var count = 3;
 
             // Create game object
             $rootScope.currentGame = {
@@ -390,6 +390,10 @@ app.controller('HighscoresController', ['$rootScope', '$scope', '$location', 'GA
 
         $rootScope.auth_callback_error = function() {
             $scope.login($rootScope.auth_callback_success);
+        }
+        
+        if ($rootScope.google_user) {
+        	$rootScope.auth_callback_success();
         }
 
         if ($rootScope.not_logged) {

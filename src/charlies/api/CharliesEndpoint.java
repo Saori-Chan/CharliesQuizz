@@ -63,6 +63,8 @@ public class CharliesEndpoint {
 		return generator.getCategories();
 	}
 
+	/*
+	 * Uncomment this method to fill the datastore
 	@ApiMethod(path="/fill")
 	public void insertQuestions(@Named("category") String category) throws Exception{
 		try {
@@ -83,6 +85,6 @@ public class CharliesEndpoint {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-	}
+	}*/
 
 }
